@@ -1,0 +1,259 @@
+﻿<GRAMMAR LANGID="409">
+
+  <!--BRING-ACTIONS-->
+	<RULE NAME="Main_bring" TOPLEVEL="ACTIVE">
+		<RULEREF NAME="Polite"/>
+		<RULEREF NAME="Verbs_bring"/>
+		<RULEREF NAME="Prepositions"/>
+		<RULEREF NAME="Objects"/>
+	</RULE>
+
+  <RULE NAME="Main_bring_human" TOPLEVEL="ACTIVE">
+	<RULEREF NAME="Polite"/>
+	<RULEREF NAME="Verbs_bring"/>
+	<RULEREF NAME="Prepositions"/>
+	<RULEREF NAME="Objects"/>
+	<RULEREF NAME="Prepositions"/>
+	<RULEREF NAME="Human"/>
+  </RULE>
+
+  <RULE NAME="Main_bring_place" TOPLEVEL="ACTIVE">
+		<RULEREF NAME="Polite"/>
+		<RULEREF NAME="Verbs_bring"/>
+		<RULEREF NAME="Prepositions"/>
+		<RULEREF NAME="Objects"/>
+		<RULEREF NAME="Prepositions"/>
+		<RULEREF NAME="Dest"/>
+	</RULE>
+
+	<!--YES-ACTIONS-->
+	<RULE NAME="Main_YES" TOPLEVEL="ACTIVE">
+		<RULEREF NAME="Polite"/>
+		<RULEREF NAME="Yes"/>
+	</RULE>
+
+	<RULE NAME="yes_polite" TOPLEVEL="ACTIVE">
+		<RULEREF NAME="Yes"/>
+		<RULEREF NAME="Polite"/>
+	</RULE>
+
+	<RULE NAME="yes_alone" TOPLEVEL="ACTIVE">
+		<RULEREF NAME="Yes"/>
+	</RULE>
+
+	<!--NO-ACTIONS-->
+	<RULE NAME="Main_No" TOPLEVEL="ACTIVE">
+		<RULEREF NAME="Polite"/>
+		<RULEREF NAME="No"/>
+	</RULE>
+
+	<RULE NAME="no_polite" TOPLEVEL="ACTIVE">
+		<RULEREF NAME="No"/>
+		<RULEREF NAME="Polite"/>
+	</RULE>
+
+	<RULE NAME="no_alone" TOPLEVEL="ACTIVE">
+		<RULEREF NAME="No"/>
+	</RULE>
+
+	<!--FIND-ACTIONS-->
+	<RULE NAME="Main_FIND_HUMAN" TOPLEVEL="ACTIVE">
+		<RULEREF NAME="Polite"/>
+		<RULEREF NAME="Verbs_find"/>
+		<RULEREF NAME="Prepositions"/>
+		<RULEREF NAME="Human"/>
+	</RULE>
+
+	<RULE NAME="Main_FIND_Object" TOPLEVEL="ACTIVE">
+		<RULEREF NAME="Polite"/>
+		<RULEREF NAME="Verbs_find"/>
+		<RULEREF NAME="Prepositions"/>
+		<RULEREF NAME="Objects"/>
+	</RULE>
+
+	<!--QUESTION-->
+	<RULE NAME="Main_question_human" TOPLEVEL="ACTIVE">
+		<RULEREF NAME="Polite"/>
+		<RULEREF NAME="Question"/>
+		<RULEREF NAME="Verbs_question"/>
+		<RULEREF NAME="Articles"/>
+		<RULEREF NAME="Human"/>
+	</RULE>
+
+	<RULE NAME="Main_question_object" TOPLEVEL="ACTIVE">
+		<RULEREF NAME="Polite"/>
+		<RULEREF NAME="Question"/>
+		<RULEREF NAME="Verbs_question"/>
+		<RULEREF NAME="Articles"/>
+		<RULEREF NAME="Objects"/>
+	</RULE>
+
+	<RULE NAME="simple_question_human" TOPLEVEL="ACTIVE">
+		<RULEREF NAME="Question"/>
+		<RULEREF NAME="Verbs_question"/>
+		<RULEREF NAME="Articles"/>
+		<RULEREF NAME="Human"/>
+	</RULE>
+
+	<RULE NAME="question_human" TOPLEVEL="ACTIVE">
+		<RULEREF NAME="Question"/>
+		<RULEREF NAME="Verbs_question"/>
+		<RULEREF NAME="Human"/>
+	</RULE>
+
+	<RULE NAME="simple_question_objects" TOPLEVEL="ACTIVE">
+		<RULEREF NAME="Question"/>
+		<RULEREF NAME="Verbs_question"/>
+		<RULEREF NAME="Articles"/>
+		<RULEREF NAME="Objects"/>
+	</RULE>
+
+	<!--VERBS-->
+  <RULE NAME="Verbs_go">
+	<LIST>
+	  <PHRASE> go</PHRASE>
+	</LIST>
+  </RULE>
+
+  <RULE NAME="Verbs_bring">
+		<LIST>
+			<PHRASE> bring </PHRASE>
+		</LIST>
+	</RULE>
+
+	<RULE NAME="Verbs_find">
+		<LIST>
+			<PHRASE> find </PHRASE>
+		</LIST>
+	</RULE>
+
+	<RULE NAME="Verbs_question">
+		<LIST>
+			<PHRASE>is</PHRASE>
+			<PHRASE>are</PHRASE>
+			<PHRASE>has</PHRASE>
+		</LIST>
+	</RULE>
+
+	<!--DESTINATIONS-->
+	<RULE NAME="Dest" DYNAMIC="TRUE">
+		<LIST>
+	
+	  <PHRASE>showcase</PHRASE >
+	  <PHRASE>mirror</PHRASE >
+	  <PHRASE>fridge</PHRASE >
+			<PHRASE>dinnertable</PHRASE >
+			<PHRASE>bed</PHRASE >
+		</LIST>
+	</RULE>
+
+	<!--OBJECTS-->
+	<RULE NAME="Objects" DYNAMIC="TRUE">
+		<LIST>
+			<PHRASE>object</PHRASE >
+			<PHRASE>soda</PHRASE >
+			<PHRASE>fried</PHRASE >
+			<PHRASE>kelloggs</PHRASE >
+			<PHRASE>chips</PHRASE >
+			<PHRASE>cereal</PHRASE >
+			<PHRASE>corn flakes</PHRASE >
+			<PHRASE>milk</PHRASE >
+			<PHRASE>ill</PHRASE >
+			<PHRASE>chill</PHRASE >
+			<PHRASE>beer</PHRASE >
+			<PHRASE>yogurt</PHRASE >
+			<PHRASE>rice</PHRASE >
+			<PHRASE>baby bottle</PHRASE >
+		</LIST>
+	</RULE>
+
+	<!--PREPOSITIONS-->
+	<RULE NAME="Prepositions" DYNAMIC="TRUE">
+		<LIST>
+			<PHRASE>the</PHRASE >
+			<PHRASE>to the</PHRASE >
+			<PHRASE>to</PHRASE >
+			<PHRASE>a</PHRASE >
+			<PHRASE>with the</PHRASE >
+			<PHRASE>from the</PHRASE >
+			<PHRASE>in the</PHRASE >
+		</LIST>
+	</RULE>
+
+	<!--ARTICLES-->
+	<RULE NAME="Articles" DYNAMIC="TRUE">
+		<LIST>
+			<PHRASE>the</PHRASE >
+		</LIST>
+	</RULE>
+
+	<!--HUMANS-->
+	<RULE NAME="Human" DYNAMIC="TRUE">
+		<LIST>
+			<PHRASE>Mother</PHRASE >
+			<PHRASE>Father</PHRASE >
+			<PHRASE>you</PHRASE >
+		</LIST>
+	</RULE>
+
+	<!--ME-->
+	<RULE NAME="Me" DYNAMIC="TRUE">
+		<LIST>
+			<PHRASE>me</PHRASE >
+		</LIST>
+	</RULE>
+
+	<!--POLITE-->
+	<RULE NAME="Polite" DYNAMIC="TRUE">
+		<LIST>
+			<PHRASE>robot</PHRASE>
+			<PHRASE>robot please</PHRASE>
+			<PHRASE>Please robot</PHRASE>
+			<PHRASE>Please</PHRASE>
+		</LIST>
+	</RULE>
+
+	<!--QUESTION-->
+	<RULE NAME="Question" DYNAMIC="TRUE">
+		<LIST>
+			<PHRASE>where</PHRASE>
+			<PHRASE>who</PHRASE>
+		</LIST>
+	</RULE>
+
+	<!--STOP-->
+	<RULE NAME="Stop" DYNAMIC="TRUE">
+		<LIST>
+			<PHRASE>stop</PHRASE>
+		</LIST>
+	</RULE>
+
+	<!--GREETINGS-->
+	<RULE NAME="Greetings" DYNAMIC="TRUE">
+		<LIST>
+			<PHRASE>hello</PHRASE>
+			<PHRASE>hi</PHRASE>
+			<PHRASE>greetings</PHRASE>
+		</LIST>
+	</RULE>
+
+	<!--YES-->
+	<RULE NAME="Yes" DYNAMIC="TRUE">
+		<LIST>
+			<PHRASE>Yes</PHRASE>
+			<PHRASE>aha</PHRASE>
+			<PHRASE>ok</PHRASE>
+			<PHRASE>yes</PHRASE>
+		</LIST>
+	</RULE>
+
+	<!--NO-->
+	<RULE NAME="No" DYNAMIC="TRUE">
+		<LIST>
+			<PHRASE>No</PHRASE>
+			<PHRASE>no</PHRASE>
+		</LIST>
+	</RULE>
+
+
+</GRAMMAR>

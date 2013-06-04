@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual C# Express 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpRec3", "SpRec3\SpRec3.csproj", "{1642AAD8-4E3E-430C-A123-9B593902CBCB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrammarConverter", "GrammarConverter\GrammarConverter.csproj", "{E5C655EB-E554-413C-8CAF-A41F739B6155}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1642AAD8-4E3E-430C-A123-9B593902CBCB} = {1642AAD8-4E3E-430C-A123-9B593902CBCB}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1642AAD8-4E3E-430C-A123-9B593902CBCB}.Debug|x86.ActiveCfg = Debug|x86
+		{1642AAD8-4E3E-430C-A123-9B593902CBCB}.Debug|x86.Build.0 = Debug|x86
+		{1642AAD8-4E3E-430C-A123-9B593902CBCB}.Release|x86.ActiveCfg = Release|x86
+		{1642AAD8-4E3E-430C-A123-9B593902CBCB}.Release|x86.Build.0 = Release|x86
+		{E5C655EB-E554-413C-8CAF-A41F739B6155}.Debug|x86.ActiveCfg = Debug|x86
+		{E5C655EB-E554-413C-8CAF-A41F739B6155}.Debug|x86.Build.0 = Debug|x86
+		{E5C655EB-E554-413C-8CAF-A41F739B6155}.Release|x86.ActiveCfg = Release|x86
+		{E5C655EB-E554-413C-8CAF-A41F739B6155}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

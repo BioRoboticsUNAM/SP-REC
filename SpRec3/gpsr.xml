@@ -1,0 +1,310 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<grammar version="1.0" xml:lang="en-US"
+		 xmlns="http://www.w3.org/2001/06/grammar"
+		 tag-format="semantics/1.0" root="Main">
+
+	<rule id="Main">
+		<one-of>
+			<item><ruleref uri="#Composite_action" /></item>
+			<item><ruleref uri="#Simple_action" /></item>
+			<item><ruleref uri="#Simple_action_polite" /></item>
+	  <item><ruleref uri="#confirmation_polite" /></item>
+	</one-of>
+	</rule>
+		 
+	<rule id="Composite_action" scope="public">
+		<item repeat="0-1">
+			<ruleref uri="#Polite" />
+		</item>
+		<ruleref uri="#Simple_action" />
+		<item repeat="1-3">
+			<ruleref uri="#Next_action" />
+		</item>
+	</rule>
+	
+	<rule id="Next_action" scope="private">
+		<item repeat="0-1">
+			<ruleref uri="#Conjunction" />
+		</item>
+		<ruleref uri="#Simple_action" />
+	</rule>
+	
+	<!-- Simple Actions //-->
+	<rule id="Simple_action" scope="private">
+		<one-of>
+			<item><ruleref uri="#go_place" /></item>
+			<item><ruleref uri="#find_object" /></item>
+			<item><ruleref uri="#take_object" /></item>
+			<item><ruleref uri="#bring_object" /></item>
+		</one-of>
+	</rule>
+	
+	<rule id="Simple_action_polite" scope="public">
+		<item repeat="0-1">
+			<ruleref uri="#Polite" />
+		</item>
+		<one-of>
+			<item><ruleref uri="#go_place" /></item>
+			<item><ruleref uri="#find_object" /></item>
+			<item><ruleref uri="#take_object" /></item> 
+			<item><ruleref uri="#bring_object" /></item>
+		</one-of>
+	</rule>
+	
+	<!--GO-ACTIONS-->
+	<rule id="go_place" scope="private">
+		<ruleref uri="#Verbs_go" />
+		<item repeat="0-1">
+			<ruleref uri="#Prepositions" />
+		</item>
+		<one-of>
+			<item><ruleref uri="#Dest" /></item>
+			<item><ruleref uri="#Human" /></item>
+		</one-of>
+	</rule>
+	
+	<rule id="go_place_polite" scope="private">
+		<ruleref uri="#Polite" />
+		<ruleref uri="#Verbs_go" />
+		<item repeat="0-1">
+			<ruleref uri="#Prepositions" />
+		</item>
+		<one-of>
+			<item><ruleref uri="#Dest" /></item>
+			<item><ruleref uri="#Human" /></item>
+		</one-of>
+	</rule>
+	
+	<!--FIND-ACTIONS-->
+	<rule id="find_object" scope="private">
+		<ruleref uri="#Verbs_find" />
+		<item repeat="0-1">
+			<ruleref uri="#Prepositions" />
+		</item>
+		<one-of>
+			<item><ruleref uri="#Objects" /></item>
+			<item><ruleref uri="#Pronouns" /></item>
+			<item><ruleref uri="#Human" /></item>
+		</one-of>
+	</rule>
+	
+	<rule id="find_object_polite" scope="private">
+		<ruleref uri="#Polite" />
+		<item repeat="0-1">
+			<ruleref uri="#Prepositions" />
+		</item>
+		<one-of>
+			<item><ruleref uri="#Objects" /></item>
+			<item><ruleref uri="#Pronouns" /></item>
+			<item><ruleref uri="#Human" /></item>
+		</one-of>
+	</rule>
+	
+	<!--TAKE-ACTIONS-->
+	<rule id="take_object" scope="private">
+		<ruleref uri="#Verbs_take" />
+		<item repeat="0-1">
+			<ruleref uri="#Prepositions" />
+		</item>
+		<one-of>
+			<item><ruleref uri="#Objects" /></item>
+			<item><ruleref uri="#Pronouns" /></item>
+			<item><ruleref uri="#Human" /></item>
+		</one-of>
+	</rule>
+	
+	<rule id="take_object_polite" scope="private">
+		<ruleref uri="#Polite" />
+		<ruleref uri="#Verbs_take" />
+		<item repeat="0-1">
+			<ruleref uri="#Prepositions" />
+		</item>
+		<one-of>
+			<item><ruleref uri="#Objects" /></item>
+			<item><ruleref uri="#Pronouns" /></item>
+		</one-of>
+	</rule>
+	
+	<!--BRING-ACTIONS-->
+	<rule id="bring_object" scope="private">
+		<ruleref uri="#Verbs_bring" />
+		<item repeat="0-1">
+			<ruleref uri="#Prepositions" />
+		</item>
+		<one-of>
+			<item><ruleref uri="#Objects" /></item>
+			<item><ruleref uri="#Pronouns" /></item>
+		</one-of>
+		<item repeat="0-1">
+			<ruleref uri="#bring_object_detination" />
+		</item>
+	</rule>
+	
+	<rule id="bring_object_polite" scope="private">
+		<ruleref uri="#Polite" />
+		<ruleref uri="#Verbs_bring" />
+		<item repeat="0-1">
+			<ruleref uri="#Prepositions" />
+		</item>
+		<one-of>
+			<item><ruleref uri="#Objects" /></item>
+			<item><ruleref uri="#Pronouns" /></item>
+		</one-of>	
+		<item repeat="0-1">
+			<ruleref uri="#bring_object_detination" />
+		</item>
+	</rule>
+	
+	
+	<rule id="bring_object_detination" scope="private">
+		<item repeat="0-1">
+			<ruleref uri="#Prepositions" />
+		</item>
+		<one-of>
+			<item><ruleref uri="#Dest" /></item>
+			<item><ruleref uri="#Human" /></item>
+		</one-of>
+	</rule>
+	
+	<!--CONFIRMATIONS-->
+	<rule id="confirmation_polite" scope="public">
+		<one-of>
+			<item>
+				<ruleref uri="#confirmation" />
+				<ruleref uri="#Polite" />
+			</item>
+			<item>
+				<ruleref uri="#Polite" />
+				<ruleref uri="#confirmation" />
+			</item>
+		</one-of>
+		
+	</rule>
+	
+	<rule id="confirmation" scope="private">
+		<one-of>
+			<item>no</item>
+			<item>yes</item>
+		</one-of>
+	</rule>
+	
+	<!--VERBS-->
+	<rule id="Verbs_go">
+		<one-of>
+			<item>go</item>
+			<item>move</item>
+			<item>navigate</item>
+			<item>exit</item>
+			<item>leave</item>
+		</one-of>
+	</rule>
+	
+	<rule id="Verbs_find">
+		<one-of>
+			<item>find</item>
+			<item>identify</item>
+		</one-of>
+	</rule>
+	
+	<rule id="Verbs_take">
+		<one-of>
+			<item>take</item>
+			<item>grasp</item>
+			<item>get</item>
+		</one-of>
+	</rule>
+	
+	<rule id="Verbs_bring">
+		<one-of>
+			<item>bring</item>
+			<item>deliver</item>
+			<item>carry</item>
+		</one-of>
+	</rule>
+	
+	<!--OBJECTS-->
+	<rule id="Objects">
+		<one-of>
+			<item>milk</item>
+			<item>newspaper</item>
+			<item>book</item>
+			<item>shoes</item>
+			<item>toy</item>
+			<item>object</item>
+			<item>coke</item>
+			<item>water</item>
+			<item>juice</item>
+		</one-of>
+	</rule>
+	
+	<!--HUMANS-->
+	<rule id="Human">
+		 <one-of>
+			<item>Mother</item>
+		 	<item>Father</item>
+			<item>me</item>
+	 	</one-of>
+	 </rule>
+	
+	<!--DESTINATIONS-->
+	<rule id="Dest">
+		<one-of>
+			<item>apartment</item>
+			<item>kitchen</item>
+			<item>livingroom</item>
+			<item>bedroom</item>
+			<item>garden</item>
+			<item>diningroom</item>
+			<item>maindoor</item>
+			<item>there</item>
+			<item>there</item>
+		</one-of>
+	</rule>
+	
+	<!--POLITE-->
+	<rule id="Polite">
+		 <one-of>
+			<item>robot</item> 
+			<item>robot please</item> 
+			<item>Please robot</item> 
+			<item>Please</item> 
+		 </one-of>
+	 </rule>
+	
+	<!--PREPOSITIONS-->
+	<rule id="Prepositions">
+		<one-of>
+			<item>to the</item>
+			<item>to my</item>
+			<item>the</item>
+			<item>from the</item>
+			<item>from my</item>
+		</one-of>
+	</rule>
+	 
+	 <!--ARTICLES-->
+	<rule id="Articles">
+		<one-of>
+			<item>the</item>
+			<item>my</item>
+		</one-of>
+	</rule>
+	
+	<!--PRONOUNS-->
+	<rule id="Pronouns">
+		<one-of>
+			<item>it</item>
+			<!--<item>he</item>
+			<item>she</phrase>//-->
+		</one-of>
+	</rule>
+	
+	<!--Conjunctions-->
+	<rule id="Conjunction">
+		<one-of>
+			<item>and</item>
+			<item>then</item>
+		</one-of>
+	</rule>
+
+</grammar>

@@ -1,0 +1,26 @@
+        #region Delegates
+        #endregion
+
+        #region Constants
+        #endregion
+
+        #region Variables
+        #endregion
+
+        #region Constructors
+        #endregion
+
+        #region Properties
+        #endregion
+
+        #region Events
+        #endregion
+
+        #region Methods
+        #endregion
+
+        #region Event Handler Functions
+        #endregion
+        
+        #region Methods de Clase (Estáticos)
+        #endregion
