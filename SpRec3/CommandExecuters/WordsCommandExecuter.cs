@@ -40,13 +40,13 @@ namespace SpRec3.CommandExecuters
 
 		protected override Response SyncTask(Command command)
 		{
+			return Response.CreateFromCommand(command, false);
+			/*
 			Match m;
 			bool result;
 			string[] words;
 			int timeOut;
-
-			return Response.CreateFromCommand(command, false);
-			/*
+			
 			m = rxWordExtractor.Match(command.Parameters);
 			if (!m.Success)
 				return Response.CreateFromCommand(command, false);

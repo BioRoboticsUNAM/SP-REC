@@ -50,14 +50,10 @@ namespace SpRec3.CommandExecuters
 			}
 			else
 			{
-				try
-				{
-					response =  Response.CreateFromCommand(command, spRec.LoadGrammar(param));
-				}
-				catch
-				{
-					response =  Response.CreateFromCommand(command, false);
-				}
+				bool result;
+				try { result = spRec.LoadGrammar(param); }
+				catch { result = false; }
+				response = Response.CreateFromCommand(command, result);
 			}
 			this.CommandManager.Busy = false;
 			return response;

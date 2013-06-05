@@ -121,6 +121,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Microphone2_128.ico" />
+    <None Include="Resources\Mic.ico" />
+    <None Include="Resources\MicRed.ico" />
     <Content Include="sp 8b.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

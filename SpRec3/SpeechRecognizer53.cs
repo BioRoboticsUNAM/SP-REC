@@ -61,14 +61,22 @@ namespace SpRec3
 			set
 			{
 				if (!profiles.ContainsKey(value)) throw new Exception("Invalid profile name");
+				if (profiles.IndexOfKey(value) == selectedProfile)
+					return;
 				selectedProfile = profiles.IndexOfKey(value);
 
 				lock (oLock)
 				{
 					if (this.engine != null)
 						this.engine.SetInputToNull();
-					SpSharedRecoContext recoContext = new SpSharedRecoContext();
-					recoContext.Recognizer.Profile = profiles[value];
+					// Try to acquire a recognition context...
+					try
+					{
+						SpSharedRecoContext recoContext = new SpSharedRecoContext();
+						recoContext.Recognizer.Profile = profiles[value];
+					}
+					// If no recognition context could be acquired, reload the default engine
+					catch { }
 					SetupEngine();
 					LoadGrammar(this.grammarFile);
 					if (hasGrammar && this.enabled)
@@ -88,9 +96,9 @@ namespace SpRec3
 		{
 			get
 			{
-				string[] profileNames = new string[profiles.Count];
-				for (int i = 0; i < profiles.Count; ++i)
-					profileNames[i] = profiles.Keys[i];
+				string[] profileNames = new string[this.profiles.Count];
+				for (int i = 0; i < this.profiles.Count; ++i)
+					profileNames[i] = this.profiles.Keys[i];
 				return (string[])profileNames;
 			}
 		}
@@ -103,7 +111,6 @@ namespace SpRec3
 				if (enabled == value)
 					return;
 
-				enabled = value;
 				lock (oLock)
 				{
 					if (hasGrammar && value)
@@ -119,13 +126,14 @@ namespace SpRec3
 						engine.SetInputToNull();
 					}
 				}
+				enabled = value;
 				OnStatusChanged();
 			}
 		}
 
 		public override bool FreeDictationEnabled
 		{
-			get { return (engine != null) && enabled && freeDictationGrammar.Enabled; }
+			get { return (engine != null) && freeDictationGrammar.Enabled; }
 			set
 			{
 				lock (oLock)
@@ -179,19 +187,29 @@ namespace SpRec3
 			SpSharedRecoContext recoContext;
 			ISpeechObjectTokens tokens;
 			SpObjectToken token;
-			profiles = new SortedList<string, SpObjectToken>();
+			this.profiles = new SortedList<string, SpObjectToken>();
 			string profileName;
 
-			recoContext = new SpeechLib.SpSharedRecoContext();
-			tokens = recoContext.Recognizer.GetProfiles(requiredAtributes, optionalAtributes);
 			selectedProfile = 0;
-			for (int i = 0; i < tokens.Count; ++i)
+			// Attempt to get profile list
+			try
 			{
-				token = tokens.Item(i);
-				profileName = token.GetDescription(0);
-				profiles.Add(profileName, token);
+				recoContext = new SpeechLib.SpSharedRecoContext();
+				tokens = recoContext.Recognizer.GetProfiles(requiredAtributes, optionalAtributes);
+				for (int i = 0; i < tokens.Count; ++i)
+				{
+					token = tokens.Item(i);
+					profileName = token.GetDescription(0);
+					this.profiles.Add(profileName, token);
+				}
+				selectedProfile = this.profiles.IndexOfKey(recoContext.Recognizer.Profile.GetDescription(0));
 			}
-			selectedProfile = profiles.IndexOfKey(recoContext.Recognizer.Profile.GetDescription(0));
+			catch
+			{
+				// If no profiles could be retreived or an error occurred, clear the list and add a default profile with no token
+				profiles.Clear();
+				profiles.Add("Default", null);
+			}
 		}
 
 		/// <summary>
@@ -203,6 +221,7 @@ namespace SpRec3
 			hasGrammar = false;
 			if ((grammarFile == null) || !grammarFile.Exists) return false;
 
+			FreeDictationEnabled = false;
 			lock (oLock)
 			{
 				engine.UnloadAllGrammars();

@@ -106,6 +106,7 @@ namespace SpRec3
 		public FrmSpRec()
 		{
 			InitializeComponent();
+			this.Icon = Properties.Resources.MicRed;
 
 			dlgSpeechHypothesized = new SpeechRecognizedEH(reco_SpeechHypothesized);
 			dlgSpeechRecognitionRejected = new SpeechRecognizedEH(reco_SpeechRecognitionRejected);
@@ -250,6 +251,7 @@ namespace SpRec3
 				gbRejected.Enabled &&
 				gbSpeechRecognized.Enabled &&
 				txtRejected.Enabled &&
+				chkFreeDictation.Enabled &&
 				chkEnable.Enabled;
 			}
 			set
@@ -259,6 +261,7 @@ namespace SpRec3
 				gbSpeechRecognized.Enabled = value;
 				txtRejected.Enabled = value;
 				chkEnable.Enabled = value;
+				chkFreeDictation.Enabled = value;
 				chkSendRejected.Enabled = value;
 			}
 		}
@@ -292,7 +295,7 @@ namespace SpRec3
 				{
 					reco.Enabled = value;
 				}
-				catch (InvalidOperationException ex) { MessageBox.Show("No microphone attached to default audio device was detected", "SP-REC", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+				catch (InvalidOperationException) { MessageBox.Show("No microphone attached to default audio device was detected", "SP-REC", MessageBoxButtons.OK, MessageBoxIcon.Error); }
 				catch
 				{
 					MessageBox.Show("Unknown error", "SP-REC", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -625,6 +628,7 @@ namespace SpRec3
 				return;
 			}
 
+			this.Icon = reco.Enabled ? Properties.Resources.Mic : Properties.Resources.MicRed;
 			if (this.chkEnable.Checked != reco.Enabled)
 				this.chkEnable.Checked = reco.Enabled;
 			if (this.chkFreeDictation.Checked != reco.FreeDictationEnabled)
@@ -840,7 +844,7 @@ namespace SpRec3
 
 		private void chkFreeDictation_CheckedChanged(object sender, EventArgs e)
 		{
-			reco.FreeDictationEnabled = !reco.FreeDictationEnabled;
+			reco.FreeDictationEnabled = chkFreeDictation.Checked;
 		}
 
 		private void btnLoadGrammar_Click(object sender, EventArgs e)

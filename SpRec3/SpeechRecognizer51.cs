@@ -121,7 +121,7 @@ namespace SpRec3
 		public override bool FreeDictationEnabled
 		{
 			get { return false; }
-			set { }
+			set { OnStatusChanged(); }
 		}
 
 		#endregion
