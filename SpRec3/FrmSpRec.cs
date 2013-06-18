@@ -67,6 +67,7 @@ namespace SpRec3
 		private CommandManager cmdMan;
 
 		private RecognizedSpeechSharedVariable shRecognizedSpeech;
+		private RecognizedSpeechSharedVariable shHypothesizedSpeech;
 
 		#region Socket Variables
 
@@ -443,7 +444,16 @@ namespace SpRec3
 			return flag;
 		}
 
-		private void SendRecognizedText(RecognizedSpeech recognizedSpeech)
+		private void SendHypothesizedSpeech(RecognizedSpeech recognizedSpeech)
+		{
+			if (!RecognitionEnabled || (recognizedSpeech.Count < 1))
+				return;
+
+			if (this.shRecognizedSpeech != null)
+				this.shHypothesizedSpeech.TryWrite(recognizedSpeech);
+		}
+
+		private void SendRecognizedSpeech(RecognizedSpeech recognizedSpeech)
 		{
 			if (!RecognitionEnabled || (recognizedSpeech.Count < 1))
 				return;
@@ -581,6 +591,14 @@ namespace SpRec3
 			}
 			else
 				shRecognizedSpeech = (RecognizedSpeechSharedVariable)cmdMan.SharedVariables["recognizedSpeech"];
+
+			if (!cmdMan.SharedVariables.Contains("hypothesizedSpeech"))
+			{
+				shHypothesizedSpeech = new RecognizedSpeechSharedVariable("hypothesizedSpeech");
+				cmdMan.SharedVariables.Add(shHypothesizedSpeech);
+			}
+			else
+				shHypothesizedSpeech = (RecognizedSpeechSharedVariable)cmdMan.SharedVariables["hypothesizedSpeech"];
 			Console("Shared variables loaded");
 		}
 
@@ -671,6 +689,8 @@ namespace SpRec3
 				return;
 			}
 
+			SendHypothesizedSpeech(recognizedSpeech);
+
 			string textToAppend;
 
 			try
@@ -744,7 +764,7 @@ namespace SpRec3
 			try
 			{
 				if (currentRecognitionMaxVolumeLevel >= volumeTreshold)
-					SendRecognizedText(recognizedSpeech);
+					SendRecognizedSpeech(recognizedSpeech);
 
 				txtHypothesis.Text = "";
 				txtRejected.Text = "";
