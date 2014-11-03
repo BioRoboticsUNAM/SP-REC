@@ -159,6 +159,7 @@ namespace SpRec3
 			cmdMan.CommandExecuters.Add(new Rec_EnaCommandExecuter(reco));
 			cmdMan.CommandExecuters.Add(new WordsCommandExecuter(reco));
 			cmdMan.CommandExecuters.Add(new FreeDictationCommandExecuter(reco));
+			cmdMan.CommandExecuters.Add(new AudioFileCommandExecuter(reco));
 
 			ControlsEnabled = false;
 			nudVolumeTreshold.Value = volumeTreshold;
@@ -449,7 +450,7 @@ namespace SpRec3
 			if (!RecognitionEnabled || (recognizedSpeech.Count < 1))
 				return;
 
-			if (this.shRecognizedSpeech != null)
+			if (this.shHypothesizedSpeech != null)
 				this.shHypothesizedSpeech.TryWrite(recognizedSpeech);
 		}
 

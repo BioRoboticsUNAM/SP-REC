@@ -286,6 +286,38 @@ namespace SpRec3
 			freeDictationGrammar.Enabled = false;
 		}
 
+		public RecognitionResult FromFile(string filePath)
+		{
+			Grammar grammar;
+			FileInfo fi = new FileInfo(this.grammarFile);
+			try { grammar = new Grammar(fi.FullName); }
+			catch { grammar = null; }
+			if (grammar == null)
+			{
+				GrammarConverter grammarConverter = new GrammarConverter();
+				string temp = Path.GetTempFileName();
+				try
+				{
+					grammarConverter.ConvertFile(fi.FullName, temp);
+					grammar = new Grammar(temp);
+				}
+				catch { return null; }
+			}
+
+			try
+			{
+				SpeechRecognitionEngine engine = new SpeechRecognitionEngine();
+				engine.LoadGrammar(grammar);
+				engine.SetInputToWaveFile(filePath);
+				RecognitionResult result = engine.Recognize();
+				return result;
+			}
+			catch
+			{
+				return null;
+			}
+		}
+
 		#endregion
 
 		#region Event Handler Functions
