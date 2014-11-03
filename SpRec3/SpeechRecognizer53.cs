@@ -277,6 +277,8 @@ namespace SpRec3
 				this.engine.SpeechRecognitionRejected += new EventHandler<SpeechRecognitionRejectedEventArgs>(speechRecognizer_SpeechRecognitionRejected);
 				this.engine.AudioLevelUpdated += new EventHandler<AudioLevelUpdatedEventArgs>(speechRecognizer_AudioLevelUpdated);
 				this.engine.MaxAlternates = 20;
+
+				
 			}
 		}
 
@@ -345,6 +347,18 @@ namespace SpRec3
 			recognizedSpeech = new RecognizedSpeech(alternates);
 
 			OnSpeechRecognitionRejected(recognizedSpeech);
+			try
+			{
+				string path = "wave";
+				if (!Directory.Exists(path))
+					Directory.CreateDirectory(path);
+				path = Path.Combine(path, "audio " + DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss") + " rejected.wav");
+				using (FileStream fs = File.OpenWrite(path))
+				{
+					e.Result.Audio.WriteToWaveStream(fs);
+				}
+			}
+			catch { }
 		}
 
 		private void speechRecognizer_SpeechHypothesized(object sender, SpeechHypothesizedEventArgs e)
@@ -385,6 +399,19 @@ namespace SpRec3
 			recognizedSpeech = new RecognizedSpeech(alternates);
 
 			OnSpeechRecognized(recognizedSpeech);
+			try
+			{
+				string path = "wave";
+				if (!Directory.Exists(path))
+					Directory.CreateDirectory(path);
+				path = Path.Combine(path, "audio " + DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss") + " recognized.wav");
+				using (FileStream fs = File.OpenWrite(path))
+				{
+					e.Result.Audio.WriteToWaveStream(fs);
+				}
+			}
+			catch { }
+			
 		}
 
 		
