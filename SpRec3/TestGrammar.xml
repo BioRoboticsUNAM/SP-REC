@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<!-- the default grammar language is US English -->
+<grammar xmlns="http://www.w3.org/2001/06/grammar"
+		 tag-format="semantics/1.0"
+		 mode="voice"
+		 xml:lang="en-US"
+		 version="1.0"
+		 root="main">
+
+	<rule id="main">
+		<one-of>
+			<item>
+				<ruleref uri="#Confirm"/>
+			</item>
+			<item>
+				<ruleref uri="#Bring_object"/>
+			</item>
+		</one-of>
+	</rule>
+
+	<rule id="Confirm">
+		<item repeat="0-1">
+			<ruleref uri="#robot"/>
+		</item>
+		<one-of>
+			<item>yes</item>
+			<item>no</item>
+		</one-of>
+	</rule>
+
+	<rule id="Bring_object">
+		<item repeat="0-1">
+			<ruleref uri="#robot_polite"/>
+		</item>
+		<item>bring</item>
+		<ruleref special="GARBAGE"/>
+		<ruleref uri="#Objects" />
+	</rule>
+
+	<!--
+     Handling language-specific pronunciations of the same word
+     A capable speech recognizer will listen for Mexican Spanish, 
+     US English, and GB english pronunciations.
+  -->
+	<rule id="robot">
+		<one-of>
+			<item xml:lang="en-GB">Robot</item>
+			<item xml:lang="en-US">Robot</item>
+			<item xml:lang="es-MX">Robot</item>
+		</one-of>
+	</rule>
+
+	<rule id="robot_polite">
+		<one-of>
+			<item>
+				<ruleref uri="#robot"/>
+			</item>
+			<item>
+				<ruleref uri="#robot"/> please
+			</item>
+			<item>
+				please <ruleref uri="#robot"/>
+			</item>
+		</one-of>
+	</rule>
+
+	<rule id="Objects" scope="public">
+		<one-of>
+			<item>
+				peach juice
+				<tag>out="peachjuice";</tag>
+			</item>
+			<item>
+				orange juice<tag>out="orangejuice";</tag>
+			</item>
+			<item>cocke</item>
+		</one-of>
+	</rule>
+
+</grammar>

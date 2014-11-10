@@ -164,6 +164,12 @@ namespace SpRec3
 			ControlsEnabled = false;
 			nudVolumeTreshold.Value = volumeTreshold;
 
+			if (this.gbAutoSave.Enabled = (reco is SpeechRecognizer53))
+				rbAutoSaveAll.Checked = true;
+			else
+				rbAutoSaveNone.Checked = true;
+			ToggleHypothesisRejectedPannelVisibility();
+			ToggleRecognitionHistoryMode();
 		}
 
 		#endregion
@@ -325,6 +331,8 @@ namespace SpRec3
 			get { return this.reco; }
 		}
 
+		public bool AppendHistoryLog { get { return this.miView_AppendRecognitionHistoryMode.Checked; } }
+
 		#endregion
 
 		#region Methods
@@ -417,6 +425,22 @@ namespace SpRec3
 			*/
 		}
 
+		private void LoadNewGrammar()
+		{
+			if (dlgOpenFile.ShowDialog() != DialogResult.OK)
+				return;
+			txtGrammarFile.Text = dlgOpenFile.FileName;
+			LoadGrammar();
+		}
+
+		private void ReloadGrammar()
+		{
+			if (!System.IO.File.Exists(txtGrammarFile.Text))
+				LoadNewGrammar();
+			else
+				LoadGrammar();
+		}
+
 		private bool MatchExpectedWords(string text)
 		{
 			int i = 0;
@@ -503,6 +527,26 @@ namespace SpRec3
 				" [" +
 				(100 * alternate.Confidence).ToString("0.00") +
 				"%]\r\n";
+		}
+
+		private void ToggleHypothesisRejectedPannelVisibility()
+		{
+			if (miView_HypothesisRejected.Checked = !miView_HypothesisRejected.Checked)
+			{
+				splitContainer1.Visible = true;
+				gbSpeechRecognized.Top = 331;
+			}
+			else
+			{
+				splitContainer1.Visible = false;
+				gbSpeechRecognized.Top = 196;
+			}
+			gbSpeechRecognized.Height = txtConsole.Top - gbSpeechRecognized.Top - 6;
+		}
+
+		private void ToggleRecognitionHistoryMode()
+		{
+			miView_AppendRecognitionHistoryMode.Checked = !miView_AppendRecognitionHistoryMode.Checked;
 		}
 
 		#endregion
@@ -789,7 +833,10 @@ namespace SpRec3
 					textToAppend += " (Not sent due to low volume)\r\n";
 				currentRecognitionMaxVolumeLevel = 0;
 
+				if(AppendHistoryLog)
 				txtRecognizedText.AppendText(textToAppend);
+				else
+				txtRecognizedText.Text = textToAppend;
 			}
 			catch { }
 
@@ -870,13 +917,7 @@ namespace SpRec3
 
 		private void btnLoadGrammar_Click(object sender, EventArgs e)
 		{
-			if (!System.IO.File.Exists(txtGrammarFile.Text))
-			{
-				if (dlgOpenFile.ShowDialog() != DialogResult.OK)
-					return;
-				txtGrammarFile.Text = dlgOpenFile.FileName;
-			}
-			LoadGrammar();
+			LoadNewGrammar();
 		}
 
 		private void btnExploreGrammar_Click(object sender, EventArgs e)
@@ -915,6 +956,44 @@ namespace SpRec3
 		private void nudVolumeTreshold_ValueChanged(object sender, EventArgs e)
 		{
 			this.volumeTreshold = (int)nudVolumeTreshold.Value;
+		}
+
+		private void rbAutoSave_CheckedChanged(object sender, EventArgs e)
+		{
+			RadioButton rb;
+			SpeechRecognizer53 reco53;
+			if (((rb = sender as RadioButton) == null) || ((reco53 = reco as SpeechRecognizer53) == null))
+				return;
+
+			string sMode = rb.Text.ToLower();
+			AutoSaveMode mode = AutoSaveMode.None;
+
+			if (sMode.Contains("recognized"))
+				mode |= AutoSaveMode.Recognized;
+			if (sMode.Contains("rejected"))
+				mode |= AutoSaveMode.Rejected;
+
+			reco53.AutoSaveMode = mode;
+		}
+
+		private void miView_HypothesisRejected_Click(object sender, EventArgs e)
+		{
+			ToggleHypothesisRejectedPannelVisibility();
+		}
+
+		private void miView_AppendRecognitionHistoryMode_Click(object sender, EventArgs e)
+		{
+			ToggleRecognitionHistoryMode();
+		}
+
+		private void miGrammar_Load_Click(object sender, EventArgs e)
+		{
+			LoadNewGrammar();
+		}
+
+		private void miGrammar_Reload_Click(object sender, EventArgs e)
+		{
+			ReloadGrammar();
 		}
 
 		#endregion

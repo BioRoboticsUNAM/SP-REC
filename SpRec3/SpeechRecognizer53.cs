@@ -7,6 +7,14 @@ using SpeechLib;
 
 namespace SpRec3
 {
+	[Flags]
+	public enum AutoSaveMode
+	{
+		None = 0,
+		Recognized = 1,
+		Rejected = 2
+	}
+
 	/// <summary>
 	/// Implements a Speech Recognizer using Sapi 5.3
 	/// </summary>
@@ -54,6 +62,8 @@ namespace SpRec3
 		#endregion
 
 		#region Properties
+
+		public AutoSaveMode AutoSaveMode { get; set; }
 
 		public override string SelectedProfile
 		{
@@ -265,6 +275,38 @@ namespace SpRec3
 			return hasGrammar;
 		}
 
+		private static void SaveRecognized(SpeechRecognizedEventArgs e)
+		{
+			try
+			{
+				string path = "wave";
+				if (!Directory.Exists(path))
+					Directory.CreateDirectory(path);
+				path = Path.Combine(path, "audio " + DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss") + " recognized.wav");
+				using (FileStream fs = File.OpenWrite(path))
+				{
+					e.Result.Audio.WriteToWaveStream(fs);
+				}
+			}
+			catch { }
+		}
+
+		private static void SaveRejected(SpeechRecognitionRejectedEventArgs e)
+		{
+			try
+			{
+				string path = "wave";
+				if (!Directory.Exists(path))
+					Directory.CreateDirectory(path);
+				path = Path.Combine(path, "audio " + DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss") + " rejected.wav");
+				using (FileStream fs = File.OpenWrite(path))
+				{
+					e.Result.Audio.WriteToWaveStream(fs);
+				}
+			}
+			catch { }
+		}
+
 		private void SetupEngine()
 		{
 			lock (oLock)
@@ -347,18 +389,8 @@ namespace SpRec3
 			recognizedSpeech = new RecognizedSpeech(alternates);
 
 			OnSpeechRecognitionRejected(recognizedSpeech);
-			try
-			{
-				string path = "wave";
-				if (!Directory.Exists(path))
-					Directory.CreateDirectory(path);
-				path = Path.Combine(path, "audio " + DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss") + " rejected.wav");
-				using (FileStream fs = File.OpenWrite(path))
-				{
-					e.Result.Audio.WriteToWaveStream(fs);
-				}
-			}
-			catch { }
+			if((this.AutoSaveMode & AutoSaveMode.Rejected) == AutoSaveMode.Rejected)
+				SaveRejected(e);
 		}
 
 		private void speechRecognizer_SpeechHypothesized(object sender, SpeechHypothesizedEventArgs e)
@@ -383,7 +415,7 @@ namespace SpRec3
 
 		private void speechRecognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
 		{
-			if ((e == null) || (e.Result == null) || (e.Result.Alternates ==null) || (e.Result.Alternates.Count < 1))
+			if ((e == null) || (e.Result == null) || (e.Result.Alternates == null) || (e.Result.Alternates.Count < 1))
 				return;
 
 			RecognizedSpeechAlternate[] alternates;
@@ -399,22 +431,10 @@ namespace SpRec3
 			recognizedSpeech = new RecognizedSpeech(alternates);
 
 			OnSpeechRecognized(recognizedSpeech);
-			try
-			{
-				string path = "wave";
-				if (!Directory.Exists(path))
-					Directory.CreateDirectory(path);
-				path = Path.Combine(path, "audio " + DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss") + " recognized.wav");
-				using (FileStream fs = File.OpenWrite(path))
-				{
-					e.Result.Audio.WriteToWaveStream(fs);
-				}
-			}
-			catch { }
-			
-		}
+			if ((this.AutoSaveMode & AutoSaveMode.Recognized) == AutoSaveMode.Recognized)
+				SaveRecognized(e);
 
-		
+		}
 
 		#endregion
 	}

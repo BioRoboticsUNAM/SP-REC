@@ -124,7 +124,14 @@
     <Content Include="Microphone2_128.ico" />
     <None Include="Resources\Mic.ico" />
     <None Include="Resources\MicRed.ico" />
+    <None Include="Resources\openHS.png" />
+    <Content Include="Objects.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="sp 8b.ico" />
+    <Content Include="TestGrammar.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
