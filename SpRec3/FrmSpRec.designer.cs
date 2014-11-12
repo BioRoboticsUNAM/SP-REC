@@ -28,15 +28,19 @@ namespace SpRec3
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmSpRec));
 			this.txtRecognizedText = new System.Windows.Forms.TextBox();
 			this.txtHypothesis = new System.Windows.Forms.TextBox();
 			this.txtRejected = new System.Windows.Forms.TextBox();
 			this.gbHypothesys = new System.Windows.Forms.GroupBox();
 			this.gbRejected = new System.Windows.Forms.GroupBox();
+			this.chkSendRejected = new System.Windows.Forms.CheckBox();
 			this.gbSettings = new System.Windows.Forms.GroupBox();
 			this.chkFreeDictation = new System.Windows.Forms.CheckBox();
+			this.lblMaxAlternates = new System.Windows.Forms.Label();
 			this.lblVolumeTreshold = new System.Windows.Forms.Label();
+			this.nudMaxAlternates = new System.Windows.Forms.NumericUpDown();
 			this.nudVolumeTreshold = new System.Windows.Forms.NumericUpDown();
 			this.cmbProfiles = new System.Windows.Forms.ComboBox();
 			this.btnExploreGrammar = new System.Windows.Forms.Button();
@@ -45,8 +49,7 @@ namespace SpRec3
 			this.txtGrammarFile = new System.Windows.Forms.TextBox();
 			this.lblProfile = new System.Windows.Forms.Label();
 			this.lblGrammar = new System.Windows.Forms.Label();
-			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-			this.chkSendRejected = new System.Windows.Forms.CheckBox();
+			this.slpHypothesisRejected = new System.Windows.Forms.SplitContainer();
 			this.gbSpeechRecognized = new System.Windows.Forms.GroupBox();
 			this.lblAudioLevel = new System.Windows.Forms.Label();
 			this.pbAudioLevel = new System.Windows.Forms.ProgressBar();
@@ -65,22 +68,38 @@ namespace SpRec3
 			this.rbAutoSaveNone = new System.Windows.Forms.RadioButton();
 			this.mnuMainMenu = new System.Windows.Forms.MenuStrip();
 			this.miGrammar = new System.Windows.Forms.ToolStripMenuItem();
-			this.miView = new System.Windows.Forms.ToolStripMenuItem();
-			this.miView_HypothesisRejected = new System.Windows.Forms.ToolStripMenuItem();
-			this.miView_AppendRecognitionHistoryMode = new System.Windows.Forms.ToolStripMenuItem();
 			this.miGrammar_Load = new System.Windows.Forms.ToolStripMenuItem();
 			this.miGrammar_Reload = new System.Windows.Forms.ToolStripMenuItem();
+			this.miView = new System.Windows.Forms.ToolStripMenuItem();
+			this.miView_Autosave = new System.Windows.Forms.ToolStripMenuItem();
+			this.miView_SilenceTimeouts = new System.Windows.Forms.ToolStripMenuItem();
+			this.miView_HypothesisRejected = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+			this.miView_AppendRecognitionHistoryMode = new System.Windows.Forms.ToolStripMenuItem();
+			this.gbSilenceTimeouts = new System.Windows.Forms.GroupBox();
+			this.nudEndSilenceTimeoutAmbiguous = new System.Windows.Forms.NumericUpDown();
+			this.nudEndSilenceTimeout = new System.Windows.Forms.NumericUpDown();
+			this.nudInitialSilenceTimeout = new System.Windows.Forms.NumericUpDown();
+			this.lblEndSilenceTimeout = new System.Windows.Forms.Label();
+			this.lblEndSilenceTimeoutAmbiguous = new System.Windows.Forms.Label();
+			this.lblInitialSilenceTimeout = new System.Windows.Forms.Label();
+			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.gbHypothesys.SuspendLayout();
 			this.gbRejected.SuspendLayout();
 			this.gbSettings.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudMaxAlternates)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.nudVolumeTreshold)).BeginInit();
-			this.splitContainer1.Panel1.SuspendLayout();
-			this.splitContainer1.Panel2.SuspendLayout();
-			this.splitContainer1.SuspendLayout();
+			this.slpHypothesisRejected.Panel1.SuspendLayout();
+			this.slpHypothesisRejected.Panel2.SuspendLayout();
+			this.slpHypothesisRejected.SuspendLayout();
 			this.gbSpeechRecognized.SuspendLayout();
 			this.statusBar.SuspendLayout();
 			this.gbAutoSave.SuspendLayout();
 			this.mnuMainMenu.SuspendLayout();
+			this.gbSilenceTimeouts.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudEndSilenceTimeoutAmbiguous)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.nudEndSilenceTimeout)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.nudInitialSilenceTimeout)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// txtRecognizedText
@@ -92,7 +111,7 @@ namespace SpRec3
 			this.txtRecognizedText.Multiline = true;
 			this.txtRecognizedText.Name = "txtRecognizedText";
 			this.txtRecognizedText.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.txtRecognizedText.Size = new System.Drawing.Size(460, 81);
+			this.txtRecognizedText.Size = new System.Drawing.Size(460, 88);
 			this.txtRecognizedText.TabIndex = 0;
 			// 
 			// txtHypothesis
@@ -104,7 +123,7 @@ namespace SpRec3
 			this.txtHypothesis.Multiline = true;
 			this.txtHypothesis.Name = "txtHypothesis";
 			this.txtHypothesis.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.txtHypothesis.Size = new System.Drawing.Size(223, 97);
+			this.txtHypothesis.Size = new System.Drawing.Size(223, 71);
 			this.txtHypothesis.TabIndex = 0;
 			// 
 			// txtRejected
@@ -116,7 +135,7 @@ namespace SpRec3
 			this.txtRejected.Multiline = true;
 			this.txtRejected.Name = "txtRejected";
 			this.txtRejected.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.txtRejected.Size = new System.Drawing.Size(213, 74);
+			this.txtRejected.Size = new System.Drawing.Size(213, 49);
 			this.txtRejected.TabIndex = 0;
 			// 
 			// gbHypothesys
@@ -127,7 +146,7 @@ namespace SpRec3
 			this.gbHypothesys.Controls.Add(this.txtHypothesis);
 			this.gbHypothesys.Location = new System.Drawing.Point(3, 3);
 			this.gbHypothesys.Name = "gbHypothesys";
-			this.gbHypothesys.Size = new System.Drawing.Size(235, 123);
+			this.gbHypothesys.Size = new System.Drawing.Size(235, 97);
 			this.gbHypothesys.TabIndex = 3;
 			this.gbHypothesys.TabStop = false;
 			this.gbHypothesys.Text = "Hypothesis:";
@@ -138,19 +157,35 @@ namespace SpRec3
 						| System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
 			this.gbRejected.Controls.Add(this.txtRejected);
+			this.gbRejected.Controls.Add(this.chkSendRejected);
 			this.gbRejected.Location = new System.Drawing.Point(3, 3);
 			this.gbRejected.Name = "gbRejected";
-			this.gbRejected.Size = new System.Drawing.Size(225, 100);
+			this.gbRejected.Size = new System.Drawing.Size(225, 97);
 			this.gbRejected.TabIndex = 4;
 			this.gbRejected.TabStop = false;
 			this.gbRejected.Text = "Rejected:";
+			// 
+			// chkSendRejected
+			// 
+			this.chkSendRejected.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.chkSendRejected.AutoSize = true;
+			this.chkSendRejected.Enabled = false;
+			this.chkSendRejected.Location = new System.Drawing.Point(6, 74);
+			this.chkSendRejected.Name = "chkSendRejected";
+			this.chkSendRejected.Size = new System.Drawing.Size(97, 17);
+			this.chkSendRejected.TabIndex = 2;
+			this.chkSendRejected.Text = "Send Rejected";
+			this.chkSendRejected.UseVisualStyleBackColor = true;
+			this.chkSendRejected.CheckedChanged += new System.EventHandler(this.chkSendRejected_CheckedChanged);
 			// 
 			// gbSettings
 			// 
 			this.gbSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
 			this.gbSettings.Controls.Add(this.chkFreeDictation);
+			this.gbSettings.Controls.Add(this.lblMaxAlternates);
 			this.gbSettings.Controls.Add(this.lblVolumeTreshold);
+			this.gbSettings.Controls.Add(this.nudMaxAlternates);
 			this.gbSettings.Controls.Add(this.nudVolumeTreshold);
 			this.gbSettings.Controls.Add(this.cmbProfiles);
 			this.gbSettings.Controls.Add(this.btnExploreGrammar);
@@ -177,6 +212,18 @@ namespace SpRec3
 			this.chkFreeDictation.UseVisualStyleBackColor = true;
 			this.chkFreeDictation.CheckedChanged += new System.EventHandler(this.chkFreeDictation_CheckedChanged);
 			// 
+			// lblMaxAlternates
+			// 
+			this.lblMaxAlternates.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.lblMaxAlternates.AutoSize = true;
+			this.lblMaxAlternates.Location = new System.Drawing.Point(333, 77);
+			this.lblMaxAlternates.Name = "lblMaxAlternates";
+			this.lblMaxAlternates.Size = new System.Drawing.Size(79, 13);
+			this.lblMaxAlternates.TabIndex = 7;
+			this.lblMaxAlternates.Text = "Max alternates:";
+			this.toolTip.SetToolTip(this.lblMaxAlternates, "Maximum number of alternate recognition results to generate for each recognition " +
+					"operation.");
+			// 
 			// lblVolumeTreshold
 			// 
 			this.lblVolumeTreshold.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -186,6 +233,27 @@ namespace SpRec3
 			this.lblVolumeTreshold.Size = new System.Drawing.Size(89, 13);
 			this.lblVolumeTreshold.TabIndex = 7;
 			this.lblVolumeTreshold.Text = "Volume Treshold:";
+			// 
+			// nudMaxAlternates
+			// 
+			this.nudMaxAlternates.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.nudMaxAlternates.Location = new System.Drawing.Point(418, 75);
+			this.nudMaxAlternates.Minimum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+			this.nudMaxAlternates.Name = "nudMaxAlternates";
+			this.nudMaxAlternates.Size = new System.Drawing.Size(52, 20);
+			this.nudMaxAlternates.TabIndex = 6;
+			this.toolTip.SetToolTip(this.nudMaxAlternates, "Maximum number of alternate recognition results to generate for each recognition " +
+					"operation.");
+			this.nudMaxAlternates.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+			this.nudMaxAlternates.ValueChanged += new System.EventHandler(this.nudMaxAlternates_ValueChanged);
 			// 
 			// nudVolumeTreshold
 			// 
@@ -228,6 +296,7 @@ namespace SpRec3
 			this.btnLoadGrammar.Name = "btnLoadGrammar";
 			this.btnLoadGrammar.Size = new System.Drawing.Size(23, 23);
 			this.btnLoadGrammar.TabIndex = 3;
+			this.toolTip.SetToolTip(this.btnLoadGrammar, "Lorad / reload the current grammar file");
 			this.btnLoadGrammar.UseVisualStyleBackColor = true;
 			this.btnLoadGrammar.Click += new System.EventHandler(this.btnLoadGrammar_Click);
 			// 
@@ -269,36 +338,23 @@ namespace SpRec3
 			this.lblGrammar.TabIndex = 0;
 			this.lblGrammar.Text = "Grammar:";
 			// 
-			// splitContainer1
+			// slpHypothesisRejected
 			// 
-			this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+			this.slpHypothesisRejected.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.splitContainer1.Location = new System.Drawing.Point(12, 196);
-			this.splitContainer1.Name = "splitContainer1";
+			this.slpHypothesisRejected.Location = new System.Drawing.Point(12, 239);
+			this.slpHypothesisRejected.Name = "slpHypothesisRejected";
 			// 
-			// splitContainer1.Panel1
+			// slpHypothesisRejected.Panel1
 			// 
-			this.splitContainer1.Panel1.Controls.Add(this.gbHypothesys);
+			this.slpHypothesisRejected.Panel1.Controls.Add(this.gbHypothesys);
 			// 
-			// splitContainer1.Panel2
+			// slpHypothesisRejected.Panel2
 			// 
-			this.splitContainer1.Panel2.Controls.Add(this.gbRejected);
-			this.splitContainer1.Panel2.Controls.Add(this.chkSendRejected);
-			this.splitContainer1.Size = new System.Drawing.Size(476, 129);
-			this.splitContainer1.SplitterDistance = 241;
-			this.splitContainer1.TabIndex = 6;
-			// 
-			// chkSendRejected
-			// 
-			this.chkSendRejected.AutoSize = true;
-			this.chkSendRejected.Enabled = false;
-			this.chkSendRejected.Location = new System.Drawing.Point(3, 109);
-			this.chkSendRejected.Name = "chkSendRejected";
-			this.chkSendRejected.Size = new System.Drawing.Size(97, 17);
-			this.chkSendRejected.TabIndex = 2;
-			this.chkSendRejected.Text = "Send Rejected";
-			this.chkSendRejected.UseVisualStyleBackColor = true;
-			this.chkSendRejected.CheckedChanged += new System.EventHandler(this.chkSendRejected_CheckedChanged);
+			this.slpHypothesisRejected.Panel2.Controls.Add(this.gbRejected);
+			this.slpHypothesisRejected.Size = new System.Drawing.Size(476, 103);
+			this.slpHypothesisRejected.SplitterDistance = 241;
+			this.slpHypothesisRejected.TabIndex = 6;
 			// 
 			// gbSpeechRecognized
 			// 
@@ -307,9 +363,9 @@ namespace SpRec3
 			this.gbSpeechRecognized.Controls.Add(this.lblAudioLevel);
 			this.gbSpeechRecognized.Controls.Add(this.pbAudioLevel);
 			this.gbSpeechRecognized.Controls.Add(this.txtRecognizedText);
-			this.gbSpeechRecognized.Location = new System.Drawing.Point(12, 331);
+			this.gbSpeechRecognized.Location = new System.Drawing.Point(12, 348);
 			this.gbSpeechRecognized.Name = "gbSpeechRecognized";
-			this.gbSpeechRecognized.Size = new System.Drawing.Size(476, 125);
+			this.gbSpeechRecognized.Size = new System.Drawing.Size(476, 132);
 			this.gbSpeechRecognized.TabIndex = 7;
 			this.gbSpeechRecognized.TabStop = false;
 			this.gbSpeechRecognized.Text = "Speech Recognized";
@@ -318,7 +374,7 @@ namespace SpRec3
 			// 
 			this.lblAudioLevel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.lblAudioLevel.AutoSize = true;
-			this.lblAudioLevel.Location = new System.Drawing.Point(8, 106);
+			this.lblAudioLevel.Location = new System.Drawing.Point(8, 113);
 			this.lblAudioLevel.Name = "lblAudioLevel";
 			this.lblAudioLevel.Size = new System.Drawing.Size(66, 13);
 			this.lblAudioLevel.TabIndex = 2;
@@ -328,7 +384,7 @@ namespace SpRec3
 			// 
 			this.pbAudioLevel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.pbAudioLevel.Location = new System.Drawing.Point(80, 106);
+			this.pbAudioLevel.Location = new System.Drawing.Point(80, 113);
 			this.pbAudioLevel.Name = "pbAudioLevel";
 			this.pbAudioLevel.Size = new System.Drawing.Size(386, 13);
 			this.pbAudioLevel.TabIndex = 1;
@@ -338,11 +394,11 @@ namespace SpRec3
 			this.txtConsole.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
 						| System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.txtConsole.Location = new System.Drawing.Point(12, 462);
+			this.txtConsole.Location = new System.Drawing.Point(12, 486);
 			this.txtConsole.Multiline = true;
 			this.txtConsole.Name = "txtConsole";
 			this.txtConsole.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.txtConsole.Size = new System.Drawing.Size(476, 89);
+			this.txtConsole.Size = new System.Drawing.Size(476, 65);
 			this.txtConsole.TabIndex = 0;
 			// 
 			// statusBar
@@ -400,13 +456,15 @@ namespace SpRec3
 			// 
 			// gbAutoSave
 			// 
+			this.gbAutoSave.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
 			this.gbAutoSave.Controls.Add(this.rbAutoSaveAll);
 			this.gbAutoSave.Controls.Add(this.rbAutoSaveRejectedOnly);
 			this.gbAutoSave.Controls.Add(this.rbAutoSaveRecognizedOnly);
 			this.gbAutoSave.Controls.Add(this.rbAutoSaveNone);
-			this.gbAutoSave.Location = new System.Drawing.Point(12, 137);
+			this.gbAutoSave.Location = new System.Drawing.Point(12, 188);
 			this.gbAutoSave.Name = "gbAutoSave";
-			this.gbAutoSave.Size = new System.Drawing.Size(476, 53);
+			this.gbAutoSave.Size = new System.Drawing.Size(476, 45);
 			this.gbAutoSave.TabIndex = 9;
 			this.gbAutoSave.TabStop = false;
 			this.gbAutoSave.Text = "Autosave";
@@ -479,33 +537,6 @@ namespace SpRec3
 			this.miGrammar.Size = new System.Drawing.Size(69, 20);
 			this.miGrammar.Text = "&Grammar";
 			// 
-			// miView
-			// 
-			this.miView.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.miView_HypothesisRejected,
-            this.miView_AppendRecognitionHistoryMode});
-			this.miView.Name = "miView";
-			this.miView.Size = new System.Drawing.Size(44, 20);
-			this.miView.Text = "&View";
-			// 
-			// miView_HypothesisRejected
-			// 
-			this.miView_HypothesisRejected.Checked = true;
-			this.miView_HypothesisRejected.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.miView_HypothesisRejected.Name = "miView_HypothesisRejected";
-			this.miView_HypothesisRejected.Size = new System.Drawing.Size(239, 22);
-			this.miView_HypothesisRejected.Text = "Hypothesis/rejected pannel";
-			this.miView_HypothesisRejected.Click += new System.EventHandler(this.miView_HypothesisRejected_Click);
-			// 
-			// miView_AppendRecognitionHistoryMode
-			// 
-			this.miView_AppendRecognitionHistoryMode.Checked = true;
-			this.miView_AppendRecognitionHistoryMode.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.miView_AppendRecognitionHistoryMode.Name = "miView_AppendRecognitionHistoryMode";
-			this.miView_AppendRecognitionHistoryMode.Size = new System.Drawing.Size(239, 22);
-			this.miView_AppendRecognitionHistoryMode.Text = "Append recognition history log";
-			this.miView_AppendRecognitionHistoryMode.Click += new System.EventHandler(this.miView_AppendRecognitionHistoryMode_Click);
-			// 
 			// miGrammar_Load
 			// 
 			this.miGrammar_Load.Name = "miGrammar_Load";
@@ -520,17 +551,187 @@ namespace SpRec3
 			this.miGrammar_Reload.Text = "&Reload grammar";
 			this.miGrammar_Reload.Click += new System.EventHandler(this.miGrammar_Reload_Click);
 			// 
+			// miView
+			// 
+			this.miView.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.miView_Autosave,
+            this.miView_SilenceTimeouts,
+            this.miView_HypothesisRejected,
+            this.toolStripMenuItem1,
+            this.miView_AppendRecognitionHistoryMode});
+			this.miView.Name = "miView";
+			this.miView.Size = new System.Drawing.Size(44, 20);
+			this.miView.Text = "&View";
+			// 
+			// miView_Autosave
+			// 
+			this.miView_Autosave.Checked = true;
+			this.miView_Autosave.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.miView_Autosave.Name = "miView_Autosave";
+			this.miView_Autosave.Size = new System.Drawing.Size(239, 22);
+			this.miView_Autosave.Text = "&Autosave pannel";
+			this.miView_Autosave.Click += new System.EventHandler(this.miView_Autosave_Click);
+			// 
+			// miView_SilenceTimeouts
+			// 
+			this.miView_SilenceTimeouts.Checked = true;
+			this.miView_SilenceTimeouts.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.miView_SilenceTimeouts.Name = "miView_SilenceTimeouts";
+			this.miView_SilenceTimeouts.Size = new System.Drawing.Size(239, 22);
+			this.miView_SilenceTimeouts.Text = "&Silence timeouts pannel";
+			this.miView_SilenceTimeouts.Click += new System.EventHandler(this.miView_SilenceTimeouts_Click);
+			// 
+			// miView_HypothesisRejected
+			// 
+			this.miView_HypothesisRejected.Checked = true;
+			this.miView_HypothesisRejected.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.miView_HypothesisRejected.Name = "miView_HypothesisRejected";
+			this.miView_HypothesisRejected.Size = new System.Drawing.Size(239, 22);
+			this.miView_HypothesisRejected.Text = "Hypothesis/rejected pannel";
+			this.miView_HypothesisRejected.Click += new System.EventHandler(this.miView_HypothesisRejected_Click);
+			// 
+			// toolStripMenuItem1
+			// 
+			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(236, 6);
+			// 
+			// miView_AppendRecognitionHistoryMode
+			// 
+			this.miView_AppendRecognitionHistoryMode.Checked = true;
+			this.miView_AppendRecognitionHistoryMode.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.miView_AppendRecognitionHistoryMode.Name = "miView_AppendRecognitionHistoryMode";
+			this.miView_AppendRecognitionHistoryMode.Size = new System.Drawing.Size(239, 22);
+			this.miView_AppendRecognitionHistoryMode.Text = "Append recognition history &log";
+			this.miView_AppendRecognitionHistoryMode.Click += new System.EventHandler(this.miView_AppendRecognitionHistoryMode_Click);
+			// 
+			// gbSilenceTimeouts
+			// 
+			this.gbSilenceTimeouts.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+						| System.Windows.Forms.AnchorStyles.Right)));
+			this.gbSilenceTimeouts.Controls.Add(this.nudEndSilenceTimeoutAmbiguous);
+			this.gbSilenceTimeouts.Controls.Add(this.nudEndSilenceTimeout);
+			this.gbSilenceTimeouts.Controls.Add(this.nudInitialSilenceTimeout);
+			this.gbSilenceTimeouts.Controls.Add(this.lblEndSilenceTimeout);
+			this.gbSilenceTimeouts.Controls.Add(this.lblEndSilenceTimeoutAmbiguous);
+			this.gbSilenceTimeouts.Controls.Add(this.lblInitialSilenceTimeout);
+			this.gbSilenceTimeouts.Location = new System.Drawing.Point(12, 137);
+			this.gbSilenceTimeouts.Name = "gbSilenceTimeouts";
+			this.gbSilenceTimeouts.Size = new System.Drawing.Size(476, 45);
+			this.gbSilenceTimeouts.TabIndex = 11;
+			this.gbSilenceTimeouts.TabStop = false;
+			this.gbSilenceTimeouts.Text = "Silence timeouts";
+			// 
+			// nudEndSilenceTimeoutAmbiguous
+			// 
+			this.nudEndSilenceTimeoutAmbiguous.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.nudEndSilenceTimeoutAmbiguous.DecimalPlaces = 3;
+			this.nudEndSilenceTimeoutAmbiguous.Increment = new decimal(new int[] {
+            15,
+            0,
+            0,
+            131072});
+			this.nudEndSilenceTimeoutAmbiguous.Location = new System.Drawing.Point(306, 19);
+			this.nudEndSilenceTimeoutAmbiguous.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+			this.nudEndSilenceTimeoutAmbiguous.Name = "nudEndSilenceTimeoutAmbiguous";
+			this.nudEndSilenceTimeoutAmbiguous.Size = new System.Drawing.Size(60, 20);
+			this.nudEndSilenceTimeoutAmbiguous.TabIndex = 6;
+			this.nudEndSilenceTimeoutAmbiguous.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.toolTip.SetToolTip(this.nudEndSilenceTimeoutAmbiguous, resources.GetString("nudEndSilenceTimeoutAmbiguous.ToolTip"));
+			this.nudEndSilenceTimeoutAmbiguous.ValueChanged += new System.EventHandler(this.nudEndSilenceTimeoutAmbiguous_ValueChanged);
+			// 
+			// nudEndSilenceTimeout
+			// 
+			this.nudEndSilenceTimeout.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.nudEndSilenceTimeout.DecimalPlaces = 3;
+			this.nudEndSilenceTimeout.Increment = new decimal(new int[] {
+            15,
+            0,
+            0,
+            131072});
+			this.nudEndSilenceTimeout.Location = new System.Drawing.Point(410, 19);
+			this.nudEndSilenceTimeout.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+			this.nudEndSilenceTimeout.Name = "nudEndSilenceTimeout";
+			this.nudEndSilenceTimeout.Size = new System.Drawing.Size(60, 20);
+			this.nudEndSilenceTimeout.TabIndex = 6;
+			this.nudEndSilenceTimeout.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.toolTip.SetToolTip(this.nudEndSilenceTimeout, resources.GetString("nudEndSilenceTimeout.ToolTip"));
+			this.nudEndSilenceTimeout.ValueChanged += new System.EventHandler(this.nudEndSilenceTimeout_ValueChanged);
+			// 
+			// nudInitialSilenceTimeout
+			// 
+			this.nudInitialSilenceTimeout.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.nudInitialSilenceTimeout.DecimalPlaces = 3;
+			this.nudInitialSilenceTimeout.Increment = new decimal(new int[] {
+            15,
+            0,
+            0,
+            131072});
+			this.nudInitialSilenceTimeout.Location = new System.Drawing.Point(142, 19);
+			this.nudInitialSilenceTimeout.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+			this.nudInitialSilenceTimeout.Name = "nudInitialSilenceTimeout";
+			this.nudInitialSilenceTimeout.Size = new System.Drawing.Size(60, 20);
+			this.nudInitialSilenceTimeout.TabIndex = 6;
+			this.nudInitialSilenceTimeout.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.toolTip.SetToolTip(this.nudInitialSilenceTimeout, resources.GetString("nudInitialSilenceTimeout.ToolTip"));
+			this.nudInitialSilenceTimeout.ValueChanged += new System.EventHandler(this.nudInitialSilenceTimeout_ValueChanged);
+			// 
+			// lblEndSilenceTimeout
+			// 
+			this.lblEndSilenceTimeout.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.lblEndSilenceTimeout.AutoSize = true;
+			this.lblEndSilenceTimeout.Location = new System.Drawing.Point(372, 21);
+			this.lblEndSilenceTimeout.Name = "lblEndSilenceTimeout";
+			this.lblEndSilenceTimeout.Size = new System.Drawing.Size(32, 13);
+			this.lblEndSilenceTimeout.TabIndex = 7;
+			this.lblEndSilenceTimeout.Text = "Final:";
+			this.toolTip.SetToolTip(this.lblEndSilenceTimeout, resources.GetString("lblEndSilenceTimeout.ToolTip"));
+			// 
+			// lblEndSilenceTimeoutAmbiguous
+			// 
+			this.lblEndSilenceTimeoutAmbiguous.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.lblEndSilenceTimeoutAmbiguous.AutoSize = true;
+			this.lblEndSilenceTimeoutAmbiguous.Location = new System.Drawing.Point(208, 21);
+			this.lblEndSilenceTimeoutAmbiguous.Name = "lblEndSilenceTimeoutAmbiguous";
+			this.lblEndSilenceTimeoutAmbiguous.Size = new System.Drawing.Size(92, 13);
+			this.lblEndSilenceTimeoutAmbiguous.TabIndex = 7;
+			this.lblEndSilenceTimeoutAmbiguous.Text = "Final (ambiguous):";
+			this.toolTip.SetToolTip(this.lblEndSilenceTimeoutAmbiguous, resources.GetString("lblEndSilenceTimeoutAmbiguous.ToolTip"));
+			// 
+			// lblInitialSilenceTimeout
+			// 
+			this.lblInitialSilenceTimeout.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.lblInitialSilenceTimeout.AutoSize = true;
+			this.lblInitialSilenceTimeout.Location = new System.Drawing.Point(102, 21);
+			this.lblInitialSilenceTimeout.Name = "lblInitialSilenceTimeout";
+			this.lblInitialSilenceTimeout.Size = new System.Drawing.Size(34, 13);
+			this.lblInitialSilenceTimeout.TabIndex = 7;
+			this.lblInitialSilenceTimeout.Text = "Initial:";
+			this.toolTip.SetToolTip(this.lblInitialSilenceTimeout, resources.GetString("lblInitialSilenceTimeout.ToolTip"));
+			// 
 			// FrmSpRec
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(500, 576);
+			this.Controls.Add(this.gbSilenceTimeouts);
 			this.Controls.Add(this.gbAutoSave);
 			this.Controls.Add(this.statusBar);
 			this.Controls.Add(this.mnuMainMenu);
 			this.Controls.Add(this.txtConsole);
 			this.Controls.Add(this.gbSpeechRecognized);
-			this.Controls.Add(this.splitContainer1);
+			this.Controls.Add(this.slpHypothesisRejected);
 			this.Controls.Add(this.gbSettings);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.KeyPreview = true;
@@ -548,11 +749,11 @@ namespace SpRec3
 			this.gbRejected.PerformLayout();
 			this.gbSettings.ResumeLayout(false);
 			this.gbSettings.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudMaxAlternates)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.nudVolumeTreshold)).EndInit();
-			this.splitContainer1.Panel1.ResumeLayout(false);
-			this.splitContainer1.Panel2.ResumeLayout(false);
-			this.splitContainer1.Panel2.PerformLayout();
-			this.splitContainer1.ResumeLayout(false);
+			this.slpHypothesisRejected.Panel1.ResumeLayout(false);
+			this.slpHypothesisRejected.Panel2.ResumeLayout(false);
+			this.slpHypothesisRejected.ResumeLayout(false);
 			this.gbSpeechRecognized.ResumeLayout(false);
 			this.gbSpeechRecognized.PerformLayout();
 			this.statusBar.ResumeLayout(false);
@@ -561,6 +762,11 @@ namespace SpRec3
 			this.gbAutoSave.PerformLayout();
 			this.mnuMainMenu.ResumeLayout(false);
 			this.mnuMainMenu.PerformLayout();
+			this.gbSilenceTimeouts.ResumeLayout(false);
+			this.gbSilenceTimeouts.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudEndSilenceTimeoutAmbiguous)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.nudEndSilenceTimeout)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.nudInitialSilenceTimeout)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -574,7 +780,7 @@ namespace SpRec3
 		private System.Windows.Forms.GroupBox gbHypothesys;
 		private System.Windows.Forms.GroupBox gbRejected;
 		private System.Windows.Forms.GroupBox gbSettings;
-		private System.Windows.Forms.SplitContainer splitContainer1;
+		private System.Windows.Forms.SplitContainer slpHypothesisRejected;
 		private System.Windows.Forms.Label lblGrammar;
 		private System.Windows.Forms.CheckBox chkEnable;
 		private System.Windows.Forms.TextBox txtGrammarFile;
@@ -609,6 +815,19 @@ namespace SpRec3
 		private System.Windows.Forms.ToolStripMenuItem miView_AppendRecognitionHistoryMode;
 		private System.Windows.Forms.ToolStripMenuItem miGrammar_Load;
 		private System.Windows.Forms.ToolStripMenuItem miGrammar_Reload;
+		private System.Windows.Forms.Label lblMaxAlternates;
+		private System.Windows.Forms.NumericUpDown nudMaxAlternates;
+		private System.Windows.Forms.GroupBox gbSilenceTimeouts;
+		private System.Windows.Forms.NumericUpDown nudInitialSilenceTimeout;
+		private System.Windows.Forms.Label lblInitialSilenceTimeout;
+		private System.Windows.Forms.NumericUpDown nudEndSilenceTimeoutAmbiguous;
+		private System.Windows.Forms.NumericUpDown nudEndSilenceTimeout;
+		private System.Windows.Forms.Label lblEndSilenceTimeout;
+		private System.Windows.Forms.Label lblEndSilenceTimeoutAmbiguous;
+		private System.Windows.Forms.ToolStripMenuItem miView_Autosave;
+		private System.Windows.Forms.ToolStripMenuItem miView_SilenceTimeouts;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+		private System.Windows.Forms.ToolTip toolTip;
 	}
 }
 

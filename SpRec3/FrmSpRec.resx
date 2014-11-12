@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <metadata name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>368, 17</value>
+  </metadata>
+  <metadata name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>368, 17</value>
+  </metadata>
   <metadata name="statusBar.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
@@ -126,6 +132,64 @@
   <metadata name="mnuMainMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>233, 17</value>
   </metadata>
+  <data name="nudEndSilenceTimeoutAmbiguous.ToolTip" xml:space="preserve">
+    <value>Determines how long the speech recognition engine will wait
+for additional input before finalizing a recognition operation
+in ambiguous cases.
+
+The speech recognizer uses this timeout interval when the
+recognition input is unambiguous. For example, for a speech
+recognition grammar that supports recognition of either
+"new game please" or "new game", "new game please" is an
+unambiguous input, and "new game" is an ambiguous input.</value>
+  </data>
+  <data name="nudEndSilenceTimeout.ToolTip" xml:space="preserve">
+    <value>Determines how long the speech recognition engine will wait
+for additional input before finalizing a recognition operation.
+
+The speech recognizer uses this timeout interval when the
+recognition input is unambiguous. For example, for a speech
+recognition grammar that supports recognition of either
+"new game please" or "new game", "new game please" is an
+unambiguous input, and "new game" is an ambiguous input.</value>
+  </data>
+  <data name="nudInitialSilenceTimeout.ToolTip" xml:space="preserve">
+    <value>Each speech recognizer has an algorithm to distinguish
+between silence and speech. If the recognizer input is silence
+during the initial silence timeout period, then the recognizer
+finalizes that recognition operation. If the initial silence timeout
+interval is set to 0, the recognizer does not perform an initial
+silence timeout check.</value>
+  </data>
+  <data name="lblEndSilenceTimeout.ToolTip" xml:space="preserve">
+    <value>Determines how long the speech recognition engine will wait
+for additional input before finalizing a recognition operation.
+
+The speech recognizer uses this timeout interval when the
+recognition input is unambiguous. For example, for a speech
+recognition grammar that supports recognition of either
+"new game please" or "new game", "new game please" is an
+unambiguous input, and "new game" is an ambiguous input.</value>
+  </data>
+  <data name="lblEndSilenceTimeoutAmbiguous.ToolTip" xml:space="preserve">
+    <value>Determines how long the speech recognition engine will wait
+for additional input before finalizing a recognition operation
+in ambiguous cases.
+
+The speech recognizer uses this timeout interval when the
+recognition input is unambiguous. For example, for a speech
+recognition grammar that supports recognition of either
+"new game please" or "new game", "new game please" is an
+unambiguous input, and "new game" is an ambiguous input.</value>
+  </data>
+  <data name="lblInitialSilenceTimeout.ToolTip" xml:space="preserve">
+    <value>Each speech recognizer has an algorithm to distinguish
+between silence and speech. If the recognizer input is silence
+during the initial silence timeout period, then the recognizer
+finalizes that recognition operation. If the initial silence timeout
+interval is set to 0, the recognizer does not perform an initial
+silence timeout check.</value>
+  </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>42</value>
   </metadata>

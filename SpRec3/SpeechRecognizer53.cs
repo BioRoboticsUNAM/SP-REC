@@ -24,6 +24,7 @@ namespace SpRec3
 
 		//private ISpeechRecoContext recoContext;
 		private SpeechRecognitionEngine engine;
+		private SpeechRecognitionEngine engineForFiles;
 		
 		//private ISpeechRecoGrammar grammar;
 		private Grammar grammar;
@@ -55,6 +56,7 @@ namespace SpRec3
 			hasGrammar = false;
 			GetProfiles();
 			SetupEngine();
+			SetupEngineForFiles();
 			Enabled = false;
 			SetupFreeDictationGrammar();
 		}
@@ -159,6 +161,70 @@ namespace SpRec3
 			get { return this.grammarFile; }
 		}
 
+		public int MaxAlternates
+		{
+			get { return this.engine.MaxAlternates; }
+			set
+			{
+				lock (oLock)
+				{
+					this.engine.MaxAlternates = value;
+				}
+				lock (this.engineForFiles)
+				{
+					this.engineForFiles.MaxAlternates = value;
+				}
+			}
+		}
+
+		public int InitialSilenceTimeout
+		{
+			get { return this.engine.InitialSilenceTimeout.Milliseconds; }
+			set
+			{
+				lock (oLock)
+				{
+					this.engine.InitialSilenceTimeout = new TimeSpan(0, 0, 0, 0, value);
+				}
+				lock (this.engineForFiles)
+				{
+					this.engineForFiles.InitialSilenceTimeout = new TimeSpan(0, 0, 0, 0, value); ;
+				}
+			}
+		}
+
+		public int EndSilenceTimeout
+		{
+			get { return this.engine.EndSilenceTimeout.Milliseconds; }
+			set
+			{
+				lock (oLock)
+				{
+					this.engine.EndSilenceTimeout = new TimeSpan(0, 0, 0, 0, value);
+				}
+				lock (this.engineForFiles)
+				{
+					this.engineForFiles.EndSilenceTimeout = new TimeSpan(0, 0, 0, 0, value);
+				}
+			}
+		}
+
+		public int EndSilenceTimeoutAmbiguous
+		{
+			get { return this.engine.EndSilenceTimeoutAmbiguous.Milliseconds; }
+			set
+			{
+				lock (oLock)
+				{
+					this.engine.EndSilenceTimeoutAmbiguous = new TimeSpan(0, 0, 0, 0, value);
+				}
+				lock (this.engineForFiles)
+				{
+					this.engineForFiles.EndSilenceTimeoutAmbiguous = new TimeSpan(0, 0, 0, 0, value);
+				}
+			}
+		}
+
 		#endregion
 
 		#region Methods
@@ -228,51 +294,70 @@ namespace SpRec3
 		/// <returns>true if grammar was loaded successfully, false otherwise</returns>
 		protected override bool LoadGrammar(FileInfo grammarFile)
 		{
-			hasGrammar = false;
+			Grammar grammar;
 			if ((grammarFile == null) || !grammarFile.Exists) return false;
 
-			FreeDictationEnabled = false;
+			grammar = LoadSapi53Grammar(grammarFile.FullName);
+			if(grammar == null)
+				grammar = LoadSapi51Grammar(grammarFile.FullName);
+			if (grammar == null)
+				return false;
+
 			lock (oLock)
 			{
-				engine.UnloadAllGrammars();
+				this.engine.UnloadAllGrammars();
 				try
 				{
-					grammar = new Grammar(grammarFile.FullName);
-					engine.LoadGrammar(grammar);
-					hasGrammar = true;
-					this.grammarFile = grammarFile.FullName;
+					this.engine.LoadGrammar(grammar);
 				}
 				catch
 				{
-					hasGrammar = false;
+					this.grammar = null;
+					this.hasGrammar = false;
+					return false;
 				}
+				this.grammar = grammar;
+				this.hasGrammar = true;
+				this.grammarFile = grammarFile.FullName;
 			}
 
-			if (!hasGrammar)
+			lock (engineForFiles)
 			{
-				GrammarConverter grammarConverter = new GrammarConverter();
-				string temp = Path.GetTempFileName();
-				try
-				{
-					grammarConverter.ConvertFile(grammarFile.FullName, temp);
-					grammar = new Grammar(temp);
-					lock (oLock)
-					{
-						engine.LoadGrammar(grammar);
-					}
-					hasGrammar = true;
-					this.grammarFile = grammarFile.FullName;
-				}
-				catch
-				{
-					if (!String.IsNullOrEmpty(temp))
-						File.Delete(temp);
-					hasGrammar = false;
-				}
+				engineForFiles.UnloadAllGrammars();
+				engineForFiles.LoadGrammar(grammar);
 			}
 
 			AddFreeDictationGrammar();
-			return hasGrammar;
+			return true;
+		}
+
+		private static Grammar LoadSapi51Grammar(string path)
+		{
+			Grammar grammar;
+			string temp = Path.GetTempFileName();
+			GrammarConverter grammarConverter = new GrammarConverter();
+			try
+			{
+				grammarConverter.ConvertFile(path, temp);
+				grammar = new Grammar(temp);
+			}
+			catch { return null; }
+			finally
+			{
+				if (!String.IsNullOrEmpty(temp))
+					File.Delete(temp);
+			}
+			return grammar;
+		}
+
+		private static Grammar LoadSapi53Grammar(string path)
+		{
+			try
+			{
+				Grammar grammar = new Grammar(path);
+				return grammar;
+			}
+			catch { return null; }
 		}
 
 		private static void SaveRecognized(SpeechRecognizedEventArgs e)
@@ -318,9 +403,16 @@ namespace SpRec3
 				this.engine.SpeechHypothesized += new EventHandler<SpeechHypothesizedEventArgs>(speechRecognizer_SpeechHypothesized);
 				this.engine.SpeechRecognitionRejected += new EventHandler<SpeechRecognitionRejectedEventArgs>(speechRecognizer_SpeechRecognitionRejected);
 				this.engine.AudioLevelUpdated += new EventHandler<AudioLevelUpdatedEventArgs>(speechRecognizer_AudioLevelUpdated);
-				this.engine.MaxAlternates = 20;
+				this.engine.MaxAlternates = 10;
+			}
+		}
 
-				
+		private void SetupEngineForFiles()
+		{
+			lock (oLock)
+			{
+				this.engineForFiles = new SpeechRecognitionEngine();
+				this.engineForFiles.MaxAlternates = this.engine.MaxAlternates;
 			}
 		}
 
@@ -332,33 +424,18 @@ namespace SpRec3
 
 		public RecognitionResult FromFile(string filePath)
 		{
-			Grammar grammar;
-			FileInfo fi = new FileInfo(this.grammarFile);
-			try { grammar = new Grammar(fi.FullName); }
-			catch { grammar = null; }
-			if (grammar == null)
+			lock (engineForFiles)
 			{
-				GrammarConverter grammarConverter = new GrammarConverter();
-				string temp = Path.GetTempFileName();
 				try
 				{
-					grammarConverter.ConvertFile(fi.FullName, temp);
-					grammar = new Grammar(temp);
+					this.engineForFiles.SetInputToWaveFile(filePath);
+					RecognitionResult result = engine.Recognize();
+					return result;
 				}
-				catch { return null; }
-			}
-
-			try
-			{
-				SpeechRecognitionEngine engine = new SpeechRecognitionEngine();
-				engine.LoadGrammar(grammar);
-				engine.SetInputToWaveFile(filePath);
-				RecognitionResult result = engine.Recognize();
-				return result;
-			}
-			catch
-			{
-				return null;
+				catch
+				{
+					return null;
+				}
 			}
 		}
 

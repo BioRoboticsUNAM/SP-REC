@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Net;
 using System.Net.Sockets;
 //using System.Speech.Recognition;
@@ -164,12 +165,8 @@ namespace SpRec3
 			ControlsEnabled = false;
 			nudVolumeTreshold.Value = volumeTreshold;
 
-			if (this.gbAutoSave.Enabled = (reco is SpeechRecognizer53))
-				rbAutoSaveAll.Checked = true;
-			else
-				rbAutoSaveNone.Checked = true;
-			ToggleHypothesisRejectedPannelVisibility();
-			ToggleRecognitionHistoryMode();
+			InitializeSapi53Components();
+			
 		}
 
 		#endregion
@@ -373,6 +370,29 @@ namespace SpRec3
 			txtConsole.AppendText(text + "\r\n");
 		}
 
+		private void InitializeSapi53Components()
+		{
+			SpeechRecognizer53 reco53 = reco as SpeechRecognizer53;
+			if (reco53 != null)
+			{
+				rbAutoSaveNone.Checked = true;
+				nudMaxAlternates.Value = reco53.MaxAlternates;
+				nudInitialSilenceTimeout.Value = reco53.InitialSilenceTimeout / 1000.0M;
+				nudEndSilenceTimeout.Value = reco53.EndSilenceTimeout / 1000.0M;
+				nudEndSilenceTimeoutAmbiguous.Value = reco53.EndSilenceTimeoutAmbiguous / 1000.0M;
+			}
+			else
+			{
+				rbAutoSaveNone.Checked = true;
+				gbAutoSave.Enabled = false;
+				lblMaxAlternates.Visible = false;
+				nudMaxAlternates.Visible = false;
+				nudMaxAlternates.Enabled = false;
+				gbSilenceTimeouts.Enabled = false;
+			}
+			
+		}
+
 		public bool LoadGrammar(string path)
 		{
 			if (!System.IO.File.Exists(path))
@@ -531,22 +551,47 @@ namespace SpRec3
 
 		private void ToggleHypothesisRejectedPannelVisibility()
 		{
-			if (miView_HypothesisRejected.Checked = !miView_HypothesisRejected.Checked)
-			{
-				splitContainer1.Visible = true;
-				gbSpeechRecognized.Top = 331;
-			}
-			else
-			{
-				splitContainer1.Visible = false;
-				gbSpeechRecognized.Top = 196;
-			}
-			gbSpeechRecognized.Height = txtConsole.Top - gbSpeechRecognized.Top - 6;
+			slpHypothesisRejected.Visible = !slpHypothesisRejected.Visible;
+			miView_HypothesisRejected.Checked = slpHypothesisRejected.Visible;
+			FixAllControlPositions();
+		}
+
+		private void ToggleAutosavePannelVisibility()
+		{
+			gbAutoSave.Visible = !gbAutoSave.Visible;
+			miView_Autosave.Checked = gbAutoSave.Visible;
+			FixAllControlPositions();
+		}
+
+		private void ToggleSilenceTimeoutsPannelVisibility()
+		{
+			gbSilenceTimeouts.Visible = !gbSilenceTimeouts.Visible;
+			miView_SilenceTimeouts.Checked = gbSilenceTimeouts.Visible;
+			FixAllControlPositions();
 		}
 
 		private void ToggleRecognitionHistoryMode()
 		{
 			miView_AppendRecognitionHistoryMode.Checked = !miView_AppendRecognitionHistoryMode.Checked;
+		}
+
+		private void FixAllControlPositions()
+		{
+			int yOffset = gbSilenceTimeouts.Top;
+			if (gbSilenceTimeouts.Visible)
+				yOffset += gbSilenceTimeouts.Height + gbSilenceTimeouts.Margin.Bottom + gbAutoSave.Margin.Top;
+			if (gbAutoSave.Visible)
+			{
+				gbAutoSave.Top = yOffset;
+				yOffset += gbAutoSave.Height + gbAutoSave.Margin.Bottom + slpHypothesisRejected.Margin.Top;
+			}
+			if (slpHypothesisRejected.Visible)
+			{
+				slpHypothesisRejected.Top = yOffset;
+				yOffset += slpHypothesisRejected.Height + slpHypothesisRejected.Margin.Bottom + gbSpeechRecognized.Margin.Top;
+			}
+			gbSpeechRecognized.Top = yOffset;
+			gbSpeechRecognized.Height = txtConsole.Top - (yOffset + gbSpeechRecognized.Margin.Bottom + txtConsole.Margin.Top);
 		}
 
 		#endregion
@@ -903,6 +948,9 @@ namespace SpRec3
 			if (System.IO.File.Exists(txtGrammarFile.Text)) LoadGrammar();
 			if (reco.HasGrammar) RecognitionEnabled = true;
 			dlgOpenFile.InitialDirectory = Application.StartupPath;
+			ToggleHypothesisRejectedPannelVisibility();
+			ToggleAutosavePannelVisibility();
+			ToggleRecognitionHistoryMode();
 		}
 
 		private void chkEnable_CheckedChanged(object sender, EventArgs e)
@@ -917,7 +965,7 @@ namespace SpRec3
 
 		private void btnLoadGrammar_Click(object sender, EventArgs e)
 		{
-			LoadNewGrammar();
+			ReloadGrammar();
 		}
 
 		private void btnExploreGrammar_Click(object sender, EventArgs e)
@@ -958,6 +1006,37 @@ namespace SpRec3
 			this.volumeTreshold = (int)nudVolumeTreshold.Value;
 		}
 
+		private void nudMaxAlternates_ValueChanged(object sender, EventArgs e)
+		{
+			SpeechRecognizer53 reco53 = this.reco as SpeechRecognizer53;
+			if ((reco53 == null) || (reco53.MaxAlternates == (int)nudMaxAlternates.Value)) return;
+			reco53.MaxAlternates = (int)nudMaxAlternates.Value;
+		}
+
+		private void nudEndSilenceTimeout_ValueChanged(object sender, EventArgs e)
+		{
+			SpeechRecognizer53 reco53 = this.reco as SpeechRecognizer53;
+			int cv = (int)(nudEndSilenceTimeout.Value * 1000);
+			if ((reco53 == null) || (reco53.EndSilenceTimeout == cv)) return;
+			reco53.EndSilenceTimeout = cv;
+		}
+
+		private void nudEndSilenceTimeoutAmbiguous_ValueChanged(object sender, EventArgs e)
+		{
+			SpeechRecognizer53 reco53 = this.reco as SpeechRecognizer53;
+			int cv = (int)(nudEndSilenceTimeoutAmbiguous.Value * 1000);
+			if ((reco53 == null) || (reco53.EndSilenceTimeoutAmbiguous == cv)) return;
+			reco53.EndSilenceTimeoutAmbiguous = cv;
+		}
+
+		private void nudInitialSilenceTimeout_ValueChanged(object sender, EventArgs e)
+		{
+			SpeechRecognizer53 reco53 = this.reco as SpeechRecognizer53;
+			int cv = (int)(nudInitialSilenceTimeout.Value * 1000);
+			if ((reco53 == null) || (reco53.InitialSilenceTimeout == cv)) return;
+			reco53.InitialSilenceTimeout = cv;
+		}
+
 		private void rbAutoSave_CheckedChanged(object sender, EventArgs e)
 		{
 			RadioButton rb;
@@ -979,6 +1058,16 @@ namespace SpRec3
 		private void miView_HypothesisRejected_Click(object sender, EventArgs e)
 		{
 			ToggleHypothesisRejectedPannelVisibility();
+		}
+
+		private void miView_Autosave_Click(object sender, EventArgs e)
+		{
+			ToggleAutosavePannelVisibility();
+		}
+
+		private void miView_SilenceTimeouts_Click(object sender, EventArgs e)
+		{
+			ToggleSilenceTimeoutsPannelVisibility();
 		}
 
 		private void miView_AppendRecognitionHistoryMode_Click(object sender, EventArgs e)
