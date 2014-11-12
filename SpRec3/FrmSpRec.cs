@@ -161,6 +161,8 @@ namespace SpRec3
 			cmdMan.CommandExecuters.Add(new WordsCommandExecuter(reco));
 			cmdMan.CommandExecuters.Add(new FreeDictationCommandExecuter(reco));
 			cmdMan.CommandExecuters.Add(new AudioFileCommandExecuter(reco));
+			cmdMan.CommandExecuters.Add(new MaxAlternatesCommandExecuter(reco));
+			cmdMan.CommandExecuters.Add(new AutoSaveCommandExecuter(reco));
 
 			ControlsEnabled = false;
 			nudVolumeTreshold.Value = volumeTreshold;

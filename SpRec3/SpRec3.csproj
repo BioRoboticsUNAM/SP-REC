@@ -70,7 +70,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandExecuters\AudioFileCommandExecuter.cs" />
+    <Compile Include="CommandExecuters\AutoSaveCommandExecuter.cs" />
     <Compile Include="CommandExecuters\GrammarCommandExecuter.cs" />
+    <Compile Include="CommandExecuters\MaxAlternatesCommandExecuter.cs" />
     <Compile Include="CommandExecuters\Rec_EnaCommandExecuter.cs" />
     <Compile Include="CommandExecuters\StatusCommandExecuter.cs" />
     <Compile Include="CommandExecuters\WordsCommandExecuter.cs" />
