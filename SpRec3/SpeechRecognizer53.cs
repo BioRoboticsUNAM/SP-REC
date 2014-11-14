@@ -15,6 +15,12 @@ namespace SpRec3
 		Rejected = 2
 	}
 
+	#region Delegates
+
+	public delegate void FileSpeechRecognizedEH(SpeechRecognizer53 sender, RecognizedSpeech recognizedSpeech);
+
+	#endregion
+
 	/// <summary>
 	/// Implements a Speech Recognizer using Sapi 5.3
 	/// </summary>
@@ -28,6 +34,7 @@ namespace SpRec3
 		
 		//private ISpeechRecoGrammar grammar;
 		private Grammar grammar;
+		private Grammar grammarForFiles;
 
 		private Grammar freeDictationGrammar;
 
@@ -60,6 +67,14 @@ namespace SpRec3
 			Enabled = false;
 			SetupFreeDictationGrammar();
 		}
+
+		#endregion
+
+		#region Events
+
+		public event FileSpeechRecognizedEH FileSpeechRecognized;
+		public event FileSpeechRecognizedEH FileSpeechHypothesized;
+		public event FileSpeechRecognizedEH FileSpeechRecognitionRejected;
 
 		#endregion
 
@@ -256,6 +271,22 @@ namespace SpRec3
 			return false;
 		}
 
+		private RecognizedSpeech GenerateRecognizedSpeechObject(System.Collections.ObjectModel.ReadOnlyCollection<RecognizedPhrase> engineAlternates)
+		{
+			RecognizedSpeechAlternate[] alternates;
+			RecognizedPhrase phrase;
+			RecognizedSpeech recognizedSpeech;
+
+			alternates = new RecognizedSpeechAlternate[engineAlternates.Count];
+			for (int i = 0; i < engineAlternates.Count; ++i)
+			{
+				phrase = engineAlternates[i];
+				alternates[i] = new RecognizedSpeechAlternate(phrase.Text, phrase.Confidence);
+			}
+			recognizedSpeech = new RecognizedSpeech(alternates);
+			return recognizedSpeech;
+		}
+
 		private void GetProfiles()
 		{
 			string requiredAtributes = "";
@@ -298,8 +329,12 @@ namespace SpRec3
 			if ((grammarFile == null) || !grammarFile.Exists) return false;
 
 			grammar = LoadSapi53Grammar(grammarFile.FullName);
-			if(grammar == null)
+			grammarForFiles = LoadSapi53Grammar(grammarFile.FullName);
+			if (grammar == null)
+			{
 				grammar = LoadSapi51Grammar(grammarFile.FullName);
+				grammarForFiles = LoadSapi51Grammar(grammarFile.FullName);
+			}
 			if (grammar == null)
 				return false;
 
@@ -324,7 +359,7 @@ namespace SpRec3
 			lock (engineForFiles)
 			{
 				engineForFiles.UnloadAllGrammars();
-				engineForFiles.LoadGrammar(grammar);
+				engineForFiles.LoadGrammar(grammarForFiles);
 			}
 
 			AddFreeDictationGrammar();
@@ -358,6 +393,33 @@ namespace SpRec3
 				return grammar;
 			}
 			catch { return null; }
+		}
+
+		/// <summary>
+		/// Rises the SpeechRecognized event
+		/// </summary>
+		protected virtual void OnFileSpeechRecognized(RecognizedSpeech recognizedSpeech)
+		{
+			if (FileSpeechRecognized != null)
+				FileSpeechRecognized(this, recognizedSpeech);
+		}
+
+		/// <summary>
+		/// Rises the SpeechHypothesized event
+		/// </summary>
+		protected virtual void OnFileSpeechHypothesized(RecognizedSpeech recognizedSpeech)
+		{
+			if (FileSpeechHypothesized != null)
+				FileSpeechHypothesized(this, recognizedSpeech);
+		}
+
+		/// <summary>
+		/// Rises the SpeechRecognitionRejected event
+		/// </summary>
+		protected virtual void OnFileSpeechRecognitionRejected(RecognizedSpeech recognizedSpeech)
+		{
+			if (FileSpeechRecognitionRejected != null)
+				FileSpeechRecognitionRejected(this, recognizedSpeech);
 		}
 
 		private static void SaveRecognized(SpeechRecognizedEventArgs e)
@@ -412,6 +474,9 @@ namespace SpRec3
 			lock (oLock)
 			{
 				this.engineForFiles = new SpeechRecognitionEngine();
+				this.engineForFiles.SpeechRecognized += new EventHandler<SpeechRecognizedEventArgs>(fileSpeechRecognizer_SpeechRecognized);
+				//this.engineForFiles.SpeechHypothesized += new EventHandler<SpeechHypothesizedEventArgs>(fileSpeechRecognizer_SpeechHypothesized);
+				this.engineForFiles.SpeechRecognitionRejected += new EventHandler<SpeechRecognitionRejectedEventArgs>(fileSpeechRecognizer_SpeechRecognitionRejected);
 				this.engineForFiles.MaxAlternates = this.engine.MaxAlternates;
 			}
 		}
@@ -429,7 +494,7 @@ namespace SpRec3
 				try
 				{
 					this.engineForFiles.SetInputToWaveFile(filePath);
-					RecognitionResult result = engine.Recognize();
+					RecognitionResult result = engineForFiles.Recognize();
 					return result;
 				}
 				catch
@@ -453,18 +518,7 @@ namespace SpRec3
 			if ((e == null) || (e.Result == null) || (e.Result.Confidence < 0.1) || (e.Result.Alternates == null) || (e.Result.Alternates.Count < 1))
 				return;
 
-			RecognizedSpeechAlternate[] alternates;
-			RecognizedPhrase phrase;
-			RecognizedSpeech recognizedSpeech;
-
-			alternates = new RecognizedSpeechAlternate[e.Result.Alternates.Count];
-			for (int i = 0; i < e.Result.Alternates.Count; ++i)
-			{
-				phrase = e.Result.Alternates[i];
-				alternates[i] = new RecognizedSpeechAlternate(phrase.Text, phrase.Confidence);
-			}
-			recognizedSpeech = new RecognizedSpeech(alternates);
-
+			RecognizedSpeech recognizedSpeech = GenerateRecognizedSpeechObject(e.Result.Alternates);
 			OnSpeechRecognitionRejected(recognizedSpeech);
 			if((this.AutoSaveMode & AutoSaveMode.Rejected) == AutoSaveMode.Rejected)
 				SaveRejected(e);
@@ -475,17 +529,7 @@ namespace SpRec3
 			if ((e == null) || (e.Result == null) || (e.Result.Confidence < 0.1) || (e.Result.Alternates == null) || (e.Result.Alternates.Count < 1))
 				return;
 
-			RecognizedSpeechAlternate[] alternates;
-			RecognizedPhrase phrase;
-			RecognizedSpeech recognizedSpeech;
-
-			alternates = new RecognizedSpeechAlternate[e.Result.Alternates.Count];
-			for (int i = 0; i < e.Result.Alternates.Count; ++i)
-			{
-				phrase = e.Result.Alternates[i];
-				alternates[i] = new RecognizedSpeechAlternate(phrase.Text, phrase.Confidence);
-			}
-			recognizedSpeech = new RecognizedSpeech(alternates);
+			RecognizedSpeech recognizedSpeech = GenerateRecognizedSpeechObject(e.Result.Alternates);
 
 			OnSpeechHypothesized(recognizedSpeech);
 		}
@@ -495,22 +539,29 @@ namespace SpRec3
 			if ((e == null) || (e.Result == null) || (e.Result.Alternates == null) || (e.Result.Alternates.Count < 1))
 				return;
 
-			RecognizedSpeechAlternate[] alternates;
-			RecognizedPhrase phrase;
-			RecognizedSpeech recognizedSpeech;
-
-			alternates = new RecognizedSpeechAlternate[e.Result.Alternates.Count];
-			for (int i = 0; i < e.Result.Alternates.Count; ++i)
-			{
-				phrase = e.Result.Alternates[i];
-				alternates[i] = new RecognizedSpeechAlternate(phrase.Text, phrase.Confidence);
-			}
-			recognizedSpeech = new RecognizedSpeech(alternates);
+			RecognizedSpeech recognizedSpeech = GenerateRecognizedSpeechObject(e.Result.Alternates);
 
 			OnSpeechRecognized(recognizedSpeech);
 			if ((this.AutoSaveMode & AutoSaveMode.Recognized) == AutoSaveMode.Recognized)
 				SaveRecognized(e);
 
+		}
+
+		private void fileSpeechRecognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
+		{
+			if ((e == null) || (e.Result == null) || (e.Result.Alternates == null) || (e.Result.Alternates.Count < 1))
+				return;
+			RecognizedSpeech recognizedSpeech = GenerateRecognizedSpeechObject(e.Result.Alternates);
+			OnSpeechRecognized(recognizedSpeech);
+
+		}
+
+		private void fileSpeechRecognizer_SpeechRecognitionRejected(object sender, SpeechRecognitionRejectedEventArgs e)
+		{
+			if ((e == null) || (e.Result == null) || (e.Result.Confidence < 0.1) || (e.Result.Alternates == null) || (e.Result.Alternates.Count < 1))
+				return;
+			RecognizedSpeech recognizedSpeech = GenerateRecognizedSpeechObject(e.Result.Alternates);
+			OnSpeechRecognitionRejected(recognizedSpeech);
 		}
 
 		#endregion

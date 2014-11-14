@@ -45,6 +45,9 @@ namespace SpRec3
 		private SpeechRecognizedEH dlgSpeechRecognized;
 		private AudioLevelChangedEH dlgAudioLevelChanged;
 		private SpeechRecognizedStatusChangedEH dlgGrammarLoaded;
+		private FileSpeechRecognizedEH dlgFileSpeechHypothesized;
+		private FileSpeechRecognizedEH dlgFileSpeechRecognitionRejected;
+		private FileSpeechRecognizedEH dlgFileSpeechRecognized;
 
 
 		/// <summary>
@@ -113,6 +116,9 @@ namespace SpRec3
 			dlgSpeechHypothesized = new SpeechRecognizedEH(reco_SpeechHypothesized);
 			dlgSpeechRecognitionRejected = new SpeechRecognizedEH(reco_SpeechRecognitionRejected);
 			dlgSpeechRecognized = new SpeechRecognizedEH(reco_SpeechRecognized);
+			dlgFileSpeechHypothesized = new FileSpeechRecognizedEH(reco_FileSpeechHypothesized);
+			dlgFileSpeechRecognitionRejected = new FileSpeechRecognizedEH(reco_FileSpeechRecognitionRejected);
+			dlgFileSpeechRecognized = new FileSpeechRecognizedEH(reco_FileSpeechRecognized);
 			dlgAudioLevelChanged = new AudioLevelChangedEH(reco_AudioLevelChanged);
 			dlgGrammarLoaded = new SpeechRecognizedStatusChangedEH(reco_GrammarLoaded);
 			dlgLoadGrammar = new LoadGrammarCaller(LoadGrammar);
@@ -128,7 +134,12 @@ namespace SpRec3
 				}
 			}
 			else
+			{
 				reco = new SpeechRecognizer53();
+				((SpeechRecognizer53)reco).FileSpeechHypothesized += dlgFileSpeechHypothesized;
+				((SpeechRecognizer53)reco).FileSpeechRecognitionRejected += dlgFileSpeechRecognitionRejected;
+				((SpeechRecognizer53)reco).FileSpeechRecognized += dlgFileSpeechRecognized;
+			}
 			reco.SpeechRecognized += dlgSpeechRecognized;
 			reco.SpeechRecognitionRejected += dlgSpeechRecognitionRejected;
 			reco.SpeechHypothesized += dlgSpeechHypothesized;
@@ -777,7 +788,7 @@ namespace SpRec3
 			{
 				if (!this.IsHandleCreated || this.Disposing || this.IsDisposed)
 					return;
-				this.BeginInvoke(dlgSpeechHypothesized, recognizedSpeech);
+				this.BeginInvoke(dlgSpeechHypothesized, sender, recognizedSpeech);
 				return;
 			}
 
@@ -807,7 +818,7 @@ namespace SpRec3
 			{
 				if (!this.IsHandleCreated || this.Disposing || this.IsDisposed)
 					return;
-				this.BeginInvoke(dlgSpeechRecognitionRejected, recognizedSpeech);
+				this.BeginInvoke(dlgSpeechRecognitionRejected, sender, recognizedSpeech);
 				return;
 			}
 
@@ -847,7 +858,7 @@ namespace SpRec3
 			{
 				if (!this.IsHandleCreated || this.Disposing || this.IsDisposed)
 					return;
-				this.BeginInvoke(dlgSpeechRecognized, recognizedSpeech);
+				this.BeginInvoke(dlgSpeechRecognized, sender, recognizedSpeech);
 				return;
 			}
 
@@ -919,6 +930,81 @@ namespace SpRec3
 				//if((currentRecognitionMaxVolumeLevel > volumeTreshold) && (audioLevel > currentRecognitionMaxVolumeLevel))
 				if (audioLevel > currentRecognitionMaxVolumeLevel)
 					currentRecognitionMaxVolumeLevel = audioLevel;
+			}
+			catch { }
+		}
+
+		private void reco_FileSpeechHypothesized(SpeechRecognizer sender, RecognizedSpeech recognizedSpeech)
+		{
+			if (this.InvokeRequired)
+			{
+				if (!this.IsHandleCreated || this.Disposing || this.IsDisposed)
+					return;
+				this.BeginInvoke(dlgFileSpeechHypothesized, sender, recognizedSpeech);
+				return;
+			}
+		}
+
+		private void reco_FileSpeechRecognitionRejected(SpeechRecognizer sender, RecognizedSpeech recognizedSpeech)
+		{
+			if (this.InvokeRequired)
+			{
+				if (!this.IsHandleCreated || this.Disposing || this.IsDisposed)
+					return;
+				this.BeginInvoke(dlgFileSpeechRecognitionRejected, sender, recognizedSpeech);
+				return;
+			}
+
+			string textToAppend;
+
+			try
+			{
+				textToAppend = String.Empty;
+				for (int i = 0; i < recognizedSpeech.Count; ++i)
+				{
+					textToAppend += GetRecognizedPhraseDisplayText(recognizedSpeech[i]);
+				}
+
+				txtRejected.AppendText(textToAppend);
+			}
+			catch { }
+		}
+
+		private void reco_FileSpeechRecognized(SpeechRecognizer sender, RecognizedSpeech recognizedSpeech)
+		{
+			if (this.InvokeRequired)
+			{
+				if (!this.IsHandleCreated || this.Disposing || this.IsDisposed)
+					return;
+				this.BeginInvoke(dlgFileSpeechRecognized, sender, recognizedSpeech);
+				return;
+			}
+
+			string textToAppend;
+
+			try
+			{
+
+				txtHypothesis.Text = "";
+				txtRejected.Text = "";
+
+				textToAppend = recognizedSpeech.Count.ToString() + " alternate";
+				if (recognizedSpeech.Count > 1)
+					textToAppend += "s";
+				textToAppend += "\r\n{\r\n";
+
+				for (int i = 0; i < recognizedSpeech.Count; ++i)
+				{
+					textToAppend += "\t";
+					textToAppend += GetRecognizedPhraseDisplayText(recognizedSpeech[i]);
+				}
+				textToAppend += "}\r\n";
+
+
+				if (AppendHistoryLog)
+					txtRecognizedText.AppendText(textToAppend);
+				else
+					txtRecognizedText.Text = textToAppend;
 			}
 			catch { }
 		}
