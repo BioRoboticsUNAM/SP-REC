@@ -2,7 +2,7 @@ using System;
 using System.Windows.Forms;
 using System.Net;
 
-namespace SpRec3
+namespace SpRec
 {
 	static class Program
 	{

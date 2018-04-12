@@ -9,10 +9,10 @@ using System.Windows.Forms;
 using Robotics.API;
 using Robotics.API.MiscSharedVariables;
 using Robotics.HAL.Sensors;
-using SpRec3.CommandExecuters;
+using SpRec.CommandExecuters;
 using Timer = System.Threading.Timer;
 
-namespace SpRec3
+namespace SpRec
 {
 	/// <summary>
 	/// Represents the method that will handle an event that receives an string as param 

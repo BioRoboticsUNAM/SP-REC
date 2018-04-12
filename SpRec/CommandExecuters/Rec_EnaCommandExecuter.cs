@@ -1,7 +1,7 @@
 using System;
 using Robotics.API;
 
-namespace SpRec3.CommandExecuters
+namespace SpRec.CommandExecuters
 {
 	public class Rec_EnaCommandExecuter : SyncCommandExecuter
 	{

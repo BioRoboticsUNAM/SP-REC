@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 
-namespace SpRec3
+namespace SpRec
 {
 	public class ExpectedPhrase: IComparable, IComparable<ExpectedPhrase>, IComparable<string>
 	{

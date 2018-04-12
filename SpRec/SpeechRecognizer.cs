@@ -7,7 +7,7 @@ using System.Speech.Recognition;
 using System.Xml;
 using Robotics.HAL.Sensors;
 
-namespace SpRec3
+namespace SpRec
 {
 	#region Delegates
 	
