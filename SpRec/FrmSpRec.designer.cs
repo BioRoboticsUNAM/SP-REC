@@ -737,7 +737,7 @@ namespace SpRec
 			this.KeyPreview = true;
 			this.MainMenuStrip = this.mnuMainMenu;
 			this.Name = "FrmSpRec";
-			this.Text = "SP-REC 3.0 - Speech Recognition";
+			this.Text = "SP-REC 3.5 - Speech Recognition";
 			this.Load += new System.EventHandler(this.Form1_Load);
 			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FrmSpRec_FormClosed);
 			this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.FrmSpRec_KeyUp);
