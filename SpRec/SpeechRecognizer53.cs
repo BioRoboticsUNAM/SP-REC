@@ -5,7 +5,7 @@ using System.Speech.Recognition;
 using Robotics.HAL.Sensors;
 using SpeechLib;
 
-namespace SpRec3
+namespace SpRec
 {
 	[Flags]
 	public enum AutoSaveMode

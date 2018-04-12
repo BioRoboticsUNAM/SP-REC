@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using System.Xml;
 
-namespace SpRec3
+namespace SpRec
 {
 	public class GrammarConverter
 	{

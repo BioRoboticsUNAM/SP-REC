@@ -2,7 +2,7 @@ using System;
 using System.Text.RegularExpressions;
 using Robotics.API;
 
-namespace SpRec3.CommandExecuters
+namespace SpRec.CommandExecuters
 {
 	public class WordsCommandExecuter : SyncCommandExecuter
 	{

@@ -4,7 +4,7 @@ using System.IO;
 using SpeechLib;
 using Robotics.HAL.Sensors;
 
-namespace SpRec3
+namespace SpRec
 {
 	/// <summary>
 	/// Implements a Speech Recognizer using Sapi 5.1

@@ -1,4 +1,4 @@
-namespace SpRec3
+namespace SpRec
 {
 	partial class FrmSpRec
 	{
@@ -279,7 +279,7 @@ namespace SpRec3
 			// 
 			this.btnExploreGrammar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnExploreGrammar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.btnExploreGrammar.Image = global::SpRec3.Properties.Resources.ZoomHS;
+			this.btnExploreGrammar.Image = global::SpRec.Properties.Resources.ZoomHS;
 			this.btnExploreGrammar.Location = new System.Drawing.Point(418, 18);
 			this.btnExploreGrammar.Name = "btnExploreGrammar";
 			this.btnExploreGrammar.Size = new System.Drawing.Size(23, 23);
@@ -291,7 +291,7 @@ namespace SpRec3
 			// 
 			this.btnLoadGrammar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnLoadGrammar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.btnLoadGrammar.Image = global::SpRec3.Properties.Resources.openHS;
+			this.btnLoadGrammar.Image = global::SpRec.Properties.Resources.openHS;
 			this.btnLoadGrammar.Location = new System.Drawing.Point(447, 18);
 			this.btnLoadGrammar.Name = "btnLoadGrammar";
 			this.btnLoadGrammar.Size = new System.Drawing.Size(23, 23);
@@ -737,7 +737,7 @@ namespace SpRec3
 			this.KeyPreview = true;
 			this.MainMenuStrip = this.mnuMainMenu;
 			this.Name = "FrmSpRec";
-			this.Text = "SP-REC 3.0 - Speech Recognition";
+			this.Text = "SP-REC 3.5 - Speech Recognition";
 			this.Load += new System.EventHandler(this.Form1_Load);
 			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FrmSpRec_FormClosed);
 			this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.FrmSpRec_KeyUp);

@@ -7,13 +7,13 @@ namespace GrammarConverter
 	{
 		static void Main(string[] args)
 		{
-			SpRec3.GrammarConverter converter;
+			SpRec.GrammarConverter converter;
 			string input;
 			string output;
 			string outputFile;
 
 			input = null;
-			converter = new SpRec3.GrammarConverter();
+			converter = new SpRec.GrammarConverter();
 			while (input == null)
 			{
 				Console.WriteLine("Xml grammar file to convert: ");
